@@ -1,16 +1,21 @@
 import colors from 'vuetify/es5/util/colors'
-
+// import "@mdi/font/css/materialdesignicons.css"
+// pass: '4rzTO8ylhlOEmpG4'
 export default {
+  generate: {
+    routes: ['/archive/1', '/archive/2', '/archive/3']
+  },
+
   // Disable server-side rendering: https://go.nuxtjs.dev/ssr-mode
   ssr: false,
 
-  // Target: https://go.nuxtjs.dev/config-target
-  target: 'static',
-
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {
-    titleTemplate: '%s - app-reading',
-    title: 'app-reading',
+    titleTemplate: '%s - Reading Platform',
+    title: 'Reading Platform',
+    htmlAttrs: {
+      lang: 'en',
+    },
     meta: [
       { charset: 'utf-8' },
       { name: 'viewport', content: 'width=device-width, initial-scale=1' },
@@ -46,16 +51,6 @@ export default {
     // Workaround to avoid enforcing hard-coded localhost:3000: https://github.com/nuxt-community/axios-module/issues/308
     baseURL: '/',
   },
-
-  // PWA module configuration: https://go.nuxtjs.dev/pwa
-  pwa: {
-    manifest: {
-      lang: 'en',
-    },
-  },
-
-  // Content module configuration: https://go.nuxtjs.dev/config-content
-  content: {},
 
   // Vuetify module configuration: https://go.nuxtjs.dev/config-vuetify
   vuetify: {

@@ -60,7 +60,7 @@
             href="https://nuxtjs.org"
             target="_blank"
             class="button--doc text-green-500 hover:underline"
-            >Nuxt Documentation</a
+            >Nuxt documentation</a
           >, whether you are new or have previous experience with the
           framework.<br />
         </p>
