@@ -1,97 +1,176 @@
 <template>
-  <v-row justify="center">
-    <v-col cols="12" sm="8" md="5">
-      <PostPreview/>
-      <PostPreview/>
-      <PostPreview/>
-    </v-col>
-    <v-col cols="12" sm="8" md="5">
-      <v-card>
-        <v-card-title>Profile Page</v-card-title>
-        <v-card-text>Lorem ipsum dolor sit amet consectetur adipisicing elit. Possimus assumenda illo, adipisci maxime incidunt perspiciatis voluptate esse! Sed, adipisci maiores quidem ut magni cumque praesentium sint et, sit nostrum quibusdam.</v-card-text>
-      </v-card>
-    </v-col>
-  </v-row>
+  <div>
+    <h1 class="text-center ma-4">Reading Apps</h1>
+    <v-row justify="center" align="center">
+      <v-col md="6" lg="5" v-if="height >= 500">
+        <v-img src="/login-image.png" width="100%"></v-img>
+      </v-col>
+      <v-col cols="12" sm="8" md="4" lg="4">
+        <v-card class="card" shaped outlined elevation="5">
+          <v-card-title>Registration</v-card-title>
+          <v-card-text>
+            <form>
+              <v-text-field
+                dense
+                v-model="username"
+                :error-messages="usernameErrors"
+                :counter="12"
+                label="Username"
+                required
+                @input="$v.username.$touch()"
+                @blur="$v.username.$touch()"
+              ></v-text-field>
+              <v-text-field
+                dense
+                v-model="email"
+                :error-messages="emailErrors"
+                label="E-mail"
+                required
+                @input="$v.email.$touch()"
+                @blur="$v.email.$touch()"
+              ></v-text-field>
+              <v-text-field
+                dense
+                v-model="password"
+                :error-messages="passwordErrors"
+                label="Password"
+                type="password"
+                required
+                @input="$v.password.$touch()"
+                @blur="$v.password.$touch()"
+              ></v-text-field>
+              <!-- <v-select
+                v-model="select"
+                :items="items"
+                :error-messages="selectErrors"
+                label="Item"
+                required
+                @change="$v.select.$touch()"
+                @blur="$v.select.$touch()"
+              ></v-select> -->
+              <v-checkbox
+                v-model="checkbox"
+                :error-messages="checkboxErrors"
+                label="Do you agree?"
+                required
+                @change="$v.checkbox.$touch()"
+                @blur="$v.checkbox.$touch()"
+              ></v-checkbox>
+              <NuxtLink to="/home">
+                <v-btn
+                  class="mr-4"
+                  @click="submit"
+                >
+                  submit
+                </v-btn>
+              </NuxtLink>
+              <v-btn @click="clear">
+                clear
+              </v-btn>
+            </form>
+          </v-card-text>
+        </v-card>
+      </v-col>
+    </v-row>
+  </div>
 </template>
-<!-- <v-card>
-  <v-card-title class="headline">
-    Welcome to the Vuetify + Nuxt.js template
-  </v-card-title>
-  <v-card-text>
-    <p>
-      Vuetify is a progressive Material Design component framework for
-      Vue.js. It was designed to empower developers to create amazing
-      applications.
-    </p>
-    <p>
-      For more information on Vuetify, check out the
-      <a
-        href="https://vuetifyjs.com"
-        target="_blank"
-        rel="noopener noreferrer"
-      >
-        documentation </a
-      >.
-    </p>
-    <p>
-      If you have questions, please join the official
-      <a
-        href="https://chat.vuetifyjs.com/"
-        target="_blank"
-        rel="noopener noreferrer"
-        title="chat"
-      >
-        discord </a
-      >.
-    </p>
-    <p>
-      Find a bug? Report it on the github
-      <a
-        href="https://github.com/vuetifyjs/vuetify/issues"
-        target="_blank"
-        rel="noopener noreferrer"
-        title="contribute"
-      >
-        issue board </a
-      >.
-    </p>
-    <p>
-      Thank you for developing with Vuetify and I look forward to bringing
-      more exciting features in the future.
-    </p>
-    <div class="text-xs-right">
-      <em><small>&mdash; John Leider</small></em>
-    </div>
-    <hr class="my-3" />
-    <a
-      href="https://nuxtjs.org/"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Nuxt Documentation
-    </a>
-    <br />
-    <a
-      href="https://github.com/nuxt/nuxt.js"
-      target="_blank"
-      rel="noopener noreferrer"
-    >
-      Nuxt GitHub
-    </a>
-  </v-card-text>
-  <v-card-actions>
-    <v-spacer />
-    <v-btn color="primary" nuxt to="/inspire"> Continue </v-btn>
-  </v-card-actions>
-</v-card> -->
+
+<style scoped>
+  .card {
+    opacity: 90% !important;
+  }
+</style>
 
 <script>
-import PostPreview from '../components/PostPreview.vue'
+  import { validationMixin } from 'vuelidate'
+  import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
+  import WorkPreview from '../components/WorkPreview.vue'
 
-export default {
-    name: "IndexPage",
+  export default {
+    layout: 'login',
+    mixins: [validationMixin],
+    validations: {
+      username: { required, maxLength: maxLength(12) },
+      password: { required, minLength: minLength(8) },
+      email: { required, email },
+      select: { required },
+      checkbox: {
+        checked (val) {
+          return val
+        },
+      },
+    },
+
     data: () => ({
-      text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi laudantium nisi tempora iure rerum, facilis saepe pariatur fugiat quas explicabo autem id eveniet distinctio porro quos eius, natus aspernatur dolore, repellendus laboriosam molestiae ipsum aut accusamus. Pariatur, necessitatibus et. Sequi ullam neque facere maiores? Nemo, corrupti ipsum sapiente ad reprehenderit placeat nobis similique modi, eaque distinctio repudiandae! Dolorem maxime neque vero iste suscipit animi deleniti, deserunt facilis hic, architecto assumenda nulla aut ipsam, qui perferendis ut praesentium amet? Porro, cupiditate voluptate deserunt aut assumenda quo aliquam quasi reprehenderit eius est beatae excepturi eum corporis odio dignissimos modi id vitae veritatis.'
-    })
-}
+      username: '',
+      password: '',
+      email: '',
+      select: null,
+      items: [
+        'Item 1',
+        'Item 2',
+        'Item 3',
+        'Item 4',
+      ],
+      checkbox: false,
+    }),
+
+    computed: {
+      checkboxErrors () {
+        const errors = []
+        if (!this.$v.checkbox.$dirty) return errors
+        !this.$v.checkbox.checked && errors.push('You must agree to continue!')
+        return errors
+      },
+      selectErrors () {
+        const errors = []
+        if (!this.$v.select.$dirty) return errors
+        !this.$v.select.required && errors.push('Item is required')
+        return errors
+      },
+      usernameErrors () {
+        const errors = []
+        if (!this.$v.username.$dirty) return errors
+        !this.$v.username.maxLength && errors.push('Username must be at most 12 characters long')
+        !this.$v.username.required && errors.push('Username is required.')
+        return errors
+      },
+      emailErrors () {
+        const errors = []
+        if (!this.$v.email.$dirty) return errors
+        !this.$v.email.email && errors.push('Must be valid e-mail')
+        !this.$v.email.required && errors.push('E-mail is required')
+        return errors
+      },
+      passwordErrors () {
+        const errors = []
+        if (!this.$v.password.$dirty) return errors
+        !this.$v.password.minLength && errors.push('Password must be at least 8 characters long')
+        !this.$v.password.required && errors.push('Password is required.')
+        return errors
+      },
+      height () {
+        switch (this.$vuetify.breakpoint.name) {
+          case 'xs': return 220
+          case 'sm': return 400
+          case 'md': return 500
+          case 'lg': return 600
+          case 'xl': return 800
+        }
+      },
+    },
+
+    methods: {
+      submit () {
+        this.$v.$touch()
+      },
+      clear () {
+        this.$v.$reset()
+        this.username = ''
+        this.email = ''
+        this.select = null
+        this.checkbox = false
+      },
+    },
+  }
 </script>

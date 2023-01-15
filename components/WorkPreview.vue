@@ -23,7 +23,10 @@
       src="/cover.jpg"
       gradient="to top right, rgba(100,115,201,.25), rgba(25,32,72,1)"
     >
-      <v-card-title class="text-capitalize">Ano hi mita hana no namae wo bokutachi wa mada shiranai</v-card-title>
+      <v-card-title 
+        class="text-capitalize" 
+        v-text="title.length > wordLimit.title ? title.slice(0,wordLimit.title)+'...':title"
+      ></v-card-title>
       <v-card-text>
         <v-chip
           class="my-2"
@@ -36,7 +39,7 @@
           </v-icon>
           Tags
         </v-chip>
-        <p v-text="text.length > 500 ? text.slice(0,500)+'...':text"></p>
+        <p class="text--secondary" v-text="text.length > wordLimit.text ? text.slice(0,wordLimit.text)+'...':text"></p>
       </v-card-text>
     </v-img>
   </v-card>
@@ -44,8 +47,10 @@
 
 <script>
 export default {
-  name: "PostPreview",
+  name: "WorkPreview",
+  props: ['wordLimit'],
   data: () => ({
+    title: 'Ano hi mita hana no namae wo bokutachi wa mada shiranai',
     text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi laudantium nisi tempora iure rerum, facilis saepe pariatur fugiat quas explicabo autem id eveniet distinctio porro quos eius, natus aspernatur dolore, repellendus laboriosam molestiae ipsum aut accusamus. Pariatur, necessitatibus et. Sequi ullam neque facere maiores? Nemo, corrupti ipsum sapiente ad reprehenderit placeat nobis similique modi, eaque distinctio repudiandae! Dolorem maxime neque vero iste suscipit animi deleniti, deserunt facilis hic, architecto assumenda nulla aut ipsam, qui perferendis ut praesentium amet? Porro, cupiditate voluptate deserunt aut assumenda quo aliquam quasi reprehenderit eius est beatae excepturi eum corporis odio dignissimos modi id vitae veritatis.'
   })
 }
