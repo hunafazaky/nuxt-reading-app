@@ -1,75 +1,97 @@
 <template>
   <div>
-    <h1 class="text-center ma-4">Reading Apps</h1>
+    <h1 class="text-center ma-4">Reading App</h1>
     <v-row justify="center" align="center">
       <v-col md="6" lg="5" v-if="height >= 500">
         <v-img src="/login-image.png" width="100%"></v-img>
       </v-col>
       <v-col cols="12" sm="8" md="4" lg="4">
-        <v-card class="card" shaped outlined elevation="5">
-          <v-card-title>Registration</v-card-title>
+        <v-card class="card mb-2" shaped outlined elevation="5">
+          <v-card-title v-text="form.title"></v-card-title>
           <v-card-text>
-            <form>
-              <v-text-field
-                dense
-                v-model="username"
-                :error-messages="usernameErrors"
-                :counter="12"
-                label="Username"
-                required
-                @input="$v.username.$touch()"
-                @blur="$v.username.$touch()"
-              ></v-text-field>
-              <v-text-field
-                dense
-                v-model="email"
-                :error-messages="emailErrors"
-                label="E-mail"
-                required
-                @input="$v.email.$touch()"
-                @blur="$v.email.$touch()"
-              ></v-text-field>
-              <v-text-field
-                dense
-                v-model="password"
-                :error-messages="passwordErrors"
-                label="Password"
-                type="password"
-                required
-                @input="$v.password.$touch()"
-                @blur="$v.password.$touch()"
-              ></v-text-field>
-              <!-- <v-select
-                v-model="select"
-                :items="items"
-                :error-messages="selectErrors"
-                label="Item"
-                required
-                @change="$v.select.$touch()"
-                @blur="$v.select.$touch()"
-              ></v-select> -->
-              <v-checkbox
-                v-model="checkbox"
-                :error-messages="checkboxErrors"
-                label="Do you agree?"
-                required
-                @change="$v.checkbox.$touch()"
-                @blur="$v.checkbox.$touch()"
-              ></v-checkbox>
-              <NuxtLink to="/home">
-                <v-btn
-                  class="mr-4"
-                  @click="submit"
+            <v-expand-transition>
+              <form>
+                <!-- <v-text-field
+                  v-if="form.title == 'Registrasi'"
+                  dense
+                  v-model="username"
+                  :error-messages="usernameErrors"
+                  :counter="12"
+                  label="Username"
+                  required
+                  @input="$v.username.$touch()"
+                  @blur="$v.username.$touch()"
+                ></v-text-field> -->
+                <v-text-field
+                  dense
+                  v-model="email"
+                  :error-messages="emailErrors"
+                  label="E-mail"
+                  required
+                  @input="$v.email.$touch()"
+                  @blur="$v.email.$touch()"
+                ></v-text-field>
+                <v-text-field
+                  dense
+                  v-model="password"
+                  :error-messages="passwordErrors"
+                  label="Password"
+                  type="password"
+                  required
+                  @input="$v.password.$touch()"
+                  @blur="$v.password.$touch()"
+                ></v-text-field>
+                <!-- <v-select
+                  v-model="select"
+                  :items="items"
+                  :error-messages="selectErrors"
+                  label="Item"
+                  required
+                  @change="$v.select.$touch()"
+                  @blur="$v.select.$touch()"
+                ></v-select> -->
+                <!-- <v-checkbox
+                  v-if="form.title == 'Registrasi'"
+                  dense
+                  v-model="checkbox"
+                  :error-messages="checkboxErrors"
+                  label="Do you agree?"
+                  required
+                  @change="$v.checkbox.$touch()"
+                  @blur="$v.checkbox.$touch()"
+                ></v-checkbox> -->
+                <v-btn 
+                  v-if="form.title == 'Registrasi'"
+                  small
+                  color="success"
+                  @click="regis"
                 >
-                  submit
+                  registrasi
                 </v-btn>
-              </NuxtLink>
-              <v-btn @click="clear">
-                clear
-              </v-btn>
-            </form>
+                <v-btn 
+                  v-if="form.title == 'Login'"
+                  small
+                  color="primary"
+                  @click="login"
+                >
+                  login
+                </v-btn>
+                <v-btn 
+                  small
+                  color="secondary" 
+                  @click="clear">
+                  clear
+                </v-btn>
+              </form>
+            </v-expand-transition>
           </v-card-text>
         </v-card>
+        <span v-if="form.title == 'Registrasi'" class="caption text--secondary">Sudah punya akun?
+          <a class="text-decoration-none" @click.prevent="openLoginForm">Login</a>
+        </span>
+        <span v-if="form.title == 'Login'" class="caption text--secondary">Belum punya akun?
+          <a class="text-decoration-none success--text" @click.prevent="openRegisForm">Registrasi</a>
+        </span>
       </v-col>
     </v-row>
   </div>
@@ -113,6 +135,9 @@
         'Item 4',
       ],
       checkbox: false,
+      form: {
+        title: 'Registrasi'
+      }
     }),
 
     computed: {
@@ -161,8 +186,15 @@
     },
 
     methods: {
-      submit () {
+      openLoginForm () {
+        this.form.title = 'Login'; 
+      },
+      openRegisForm () {
+        this.form.title = 'Registrasi'; 
+      },
+      login () {
         this.$v.$touch()
+        this.$router.push('/home');
       },
       clear () {
         this.$v.$reset()
