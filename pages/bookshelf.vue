@@ -1,29 +1,19 @@
 <template>
-  <v-row justify="start" class="px-4">
-    <v-col class="pa-1" cols="12">
-      <v-slide-group
-        active-class="primary"
-        prev-icon="mdi-arrow-left-bold-box"
-        next-icon="mdi-arrow-right-bold-box"
-        show-arrows
-      >
-        <v-slide-item v-for="n in 15" :key="n" v-slot="{ active, toggle }">
-          <v-card
-            :color="active ? undefined : 'grey lighten-1'"
-            class="mx-2"
-            height="210"
-            width="148"
-            @click="toggle"
-          >
-            <v-scale-transition>
-              <WorkPreview
-                :wordLimit="{ title: 100, text: 0 }"
-                :miniVariant="true"
-              />
-            </v-scale-transition>
-          </v-card>
-        </v-slide-item>
-      </v-slide-group>
+  <v-row justify="start" class="px-4 pt-4">
+    <v-col class="px-1 py-0" cols="4" sm="4" md="3" xl="2">
+      <WorkPreview :wordLimit="{ title: 100, text: 0 }" :miniVariant="true" />
+    </v-col>
+    <v-col class="px-1 py-0" cols="4" sm="4" md="3" xl="2">
+      <WorkPreview :wordLimit="{ title: 100, text: 0 }" :miniVariant="true" />
+    </v-col>
+    <v-col class="px-1 py-0" cols="4" sm="4" md="3" xl="2">
+      <WorkPreview :wordLimit="{ title: 100, text: 0 }" :miniVariant="true" />
+    </v-col>
+    <v-col class="px-1 py-0" cols="4" sm="4" md="3" xl="2">
+      <WorkPreview :wordLimit="{ title: 100, text: 0 }" :miniVariant="true" />
+    </v-col>
+    <v-col class="px-1 py-0" cols="4" sm="4" md="3" xl="2">
+      <WorkPreview :wordLimit="{ title: 100, text: 0 }" :miniVariant="true" />
     </v-col>
   </v-row>
 </template>

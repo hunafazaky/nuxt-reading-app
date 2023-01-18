@@ -1,5 +1,5 @@
 <template>
-  <v-card rounded="lg" class="card mb-4" width="100%" dark>
+  <v-card rounded="lg" class="card mb-4" :width="width" dark>
     <v-card-header v-if="miniVariant === false">
       <v-avatar color="secondary" size="36" class="ma-2">
         <v-icon dark> mdi-account-circle </v-icon>
@@ -21,10 +21,10 @@
         "
       ></v-card-title>
       <v-spacer></v-spacer>
-      <v-chip class="my-4 ml-4" color="pink" label x-small text-color="white">
+      <!-- <v-chip class="my-4 ml-4" color="pink" label x-small text-color="white">
         <v-icon left x-small> mdi-label </v-icon>
         Tags
-      </v-chip>
+      </v-chip> -->
       <v-spacer></v-spacer>
       <v-card-text>
         <p
@@ -43,7 +43,14 @@
 <script>
 export default {
   name: 'WorkPreview',
-  props: ['wordLimit', 'miniVariant'],
+  props: {
+    wordLimit: Object,
+    miniVariant: boolean,
+    width: {
+      type: String,
+      default:'100%'
+    }
+  },
   data: () => ({
     title: 'Ano hi mita hana no namae wo bokutachi wa mada shiranai',
     text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi laudantium nisi tempora iure rerum, facilis saepe pariatur fugiat quas explicabo autem id eveniet distinctio porro quos eius, natus aspernatur dolore, repellendus laboriosam molestiae ipsum aut accusamus. Pariatur, necessitatibus et. Sequi ullam neque facere maiores? Nemo, corrupti ipsum sapiente ad reprehenderit placeat nobis similique modi, eaque distinctio repudiandae! Dolorem maxime neque vero iste suscipit animi deleniti, deserunt facilis hic, architecto assumenda nulla aut ipsam, qui perferendis ut praesentium amet? Porro, cupiditate voluptate deserunt aut assumenda quo aliquam quasi reprehenderit eius est beatae excepturi eum corporis odio dignissimos modi id vitae veritatis.',
