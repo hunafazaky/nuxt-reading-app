@@ -1,106 +1,53 @@
 <template>
   <v-row justify="center">
+    <v-col cols="12" md="5">
+      <v-sheet
+        outlined
+        rounded="lg"
+        width="100%"
+        class="overflow-hidden"
+        :style="{
+          'padding-top': 100 * (19 / 13) + '%',
+          position: 'relative',
+        }"
+      >
+        <v-img
+          style="inset: 0; position: absolute"
+          v-if="file"
+          height="100%"
+          cover
+          :src="file"
+        ></v-img>
+      </v-sheet>
+    </v-col>
+    <v-col cols="12" md="7">
+      <h1 class="mb-4" v-text="title"></h1>
+      <v-divider></v-divider>
+      <v-chip-group column class="mb-4">
+        <v-chip
+          label
+          small
+          :color="type === 'fiksi' ? 'purple' : 'error'"
+          class="font-weight-bold"
+        >
+          <v-icon small left>mdi-pound</v-icon>
+          <span class="text-capitalize" v-text="type"></span>
+        </v-chip>
+        <v-chip
+          label
+          small
+          color="grey darken-4"
+          class="font-weight-bold white--text"
+          v-for="hashtag in hashtags"
+          :key="hashtag"
+        >
+          <v-icon small left>mdi-pound</v-icon>
+          <span class="text-capitalize" v-text="hashtag"></span>
+        </v-chip>
+      </v-chip-group>
+    </v-col>
     <v-col cols="12">
-      <v-card class="mb-2" rounded="lg" outlined>
-        <v-card-text>
-          <v-row>
-            <v-col cols="4" md="3">
-              <v-sheet
-                :outlined="!file"
-                rounded="lg"
-                width="100%"
-                class="overflow-hidden"
-                :style="{
-                  'padding-top': 100 * (19 / 13) + '%',
-                  position: 'relative',
-                }"
-              >
-                <v-img
-                  style="inset: 0; position: absolute"
-                  v-if="file"
-                  height="100%"
-                  cover
-                  :src="imagePreview"
-                ></v-img>
-                <v-icon style="inset: 0; position: absolute" v-else x-large>
-                  mdi-plus-box
-                </v-icon>
-              </v-sheet>
-              <p class="caption text--secondary text-center">Preview</p>
-            </v-col>
-            <v-col cols="8" md="9">
-              <v-text-field
-                outlined
-                dense
-                v-model="title"
-                label="Judul"
-                hint="Pilih judul yang sesuai dan menarik pembaca"
-                persistent-hint
-              ></v-text-field>
-              <v-radio-group class="my-0" v-model="radios" row mandatory>
-                <v-radio
-                  label="Non-Fiksi"
-                  value="non-fiction"
-                  off-icon="mdi-pound-box"
-                  on-icon="mdi-pound-box"
-                  color="error"
-                ></v-radio>
-                <v-radio
-                  label="Fiksi"
-                  value="fiction"
-                  off-icon="mdi-pound-box"
-                  on-icon="mdi-pound-box"
-                  color="purple"
-                ></v-radio>
-              </v-radio-group>
-              <v-autocomplete
-                outlined
-                dense
-                multiple
-                hide-selected
-                small-chips
-                deletable-chips
-                clearable
-                hint="Pilih (max. 5) kategori yang paling sesuai"
-                :counter="5"
-                persistent-hint
-                v-model="select"
-                :items="items"
-                label="Kategori"
-              ></v-autocomplete>
-              <v-file-input
-                prepend-icon=""
-                append-outer-icon="mdi-image-plus"
-                outlined
-                dense
-                clearable
-                show-size
-                truncate-length="25"
-                label="Cover"
-                hint="Direkomendasikan cover dengan ratio 13:19"
-                persistent-hint
-                v-model="file"
-                @change="fileToImage"
-              ></v-file-input>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col cols="12">
-              <v-textarea
-                rows="5"
-                row-height="40"
-                auto-grow
-                outlined
-                name="content"
-                label="Konten"
-              ></v-textarea>
-            </v-col>
-          </v-row>
-        </v-card-text>
-        <v-card-actions>
-          <Dialog />
-        </v-card-actions>
-      </v-card>
+      <p v-text="text"></p>
     </v-col>
   </v-row>
 </template>
@@ -111,12 +58,15 @@ import Dialog from '../components/Dialog.vue'
 export default {
   layout: 'default',
   data: () => ({
-    radios: 'non-fiction',
-    title: null,
+    title: 'Ano hi mita hana no namae wo bokutachi wa mada shiranai',
+    text: `Jenis huruf serbaguna akan berisi sejumlah bobot dan gaya font yang berbeda seperti tebal, tebal miring, semi-tebal, Reguler, Reguler-miring, Ringan, Ringan-miring, dll. Font yang bervariasi dalam berat dan gaya akan berguna saat Anda membutuhkan caption, pull-quotes, atau sub-head yang memerlukan bobot atau penekanan berbeda agar menonjol dari teks sekitarnya. Ini lebih baik daripada menggunakan sejumlah bentuk dengan tipe berbeda yang akan menyebabkan inkonsistensi. 
+    
+    Sebaiknya gunakan  satu atau dua jenis font, tetapi variasikan bobot dan gaya font jika diperlukan. Font serbaguna juga akan mendukung True Small Caps (Huruf kapital yang biasanya mendekati tinggi huruf kecil, dan untuk beberapa font, bisa lebih tinggi) yang dirancang untuk mempertahankan bobot yang sama dengan huruf lainnya dan memiliki rasio aspek yang lebih luas untuk lebih mudah dibaca. `,
+    type: 'non-fiksi',
     select: null,
-    file: null,
+    file: '/cover.jpg',
     imagePreview: null,
-    items: [
+    hashtags: [
       'Teknologi',
       'Sains',
       'Sejarah',

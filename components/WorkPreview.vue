@@ -58,7 +58,7 @@
             <v-btn fab small color="primary">
               <v-icon small> mdi-bookmark-plus </v-icon>
             </v-btn>
-            <v-btn fab small color="success">
+            <v-btn fab small color="success" nuxt to="/read">
               <v-icon small> mdi-book-open </v-icon>
             </v-btn>
           </div>
@@ -67,7 +67,7 @@
               <v-icon left>mdi-bookmark-plus</v-icon>
               simpan
             </v-btn>
-            <v-btn small color="success">
+            <v-btn small color="success" nuxt to="/read">
               <v-icon left>mdi-book-open</v-icon>
               lanjut baca
             </v-btn>

@@ -6,7 +6,7 @@
           <v-row>
             <v-col cols="4" md="3">
               <v-sheet
-                :outlined="!file"
+                outlined
                 rounded="lg"
                 width="100%"
                 class="overflow-hidden"
@@ -93,6 +93,7 @@
                 outlined
                 name="content"
                 label="Konten"
+                v-model="text"
               ></v-textarea>
             </v-col>
           </v-row>
@@ -113,6 +114,7 @@ export default {
   data: () => ({
     radios: 'non-fiction',
     title: null,
+    text: null,
     select: null,
     file: null,
     imagePreview: null,
