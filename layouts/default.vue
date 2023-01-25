@@ -204,6 +204,12 @@ export default {
 .w-100 {
   width: 100%;
 }
+.zoom-in-pointer {
+  cursor: zoom-in;
+}
+.zoom-out-pointer {
+  cursor: zoom-out;
+}
 </style>
 
 <!-- SAMPAH -->

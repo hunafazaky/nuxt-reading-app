@@ -23,8 +23,14 @@
         gradient="to top, rgba(12.9, 12.9, 12.9, .25), rgba(12.9, 12.9, 12.9, 1)"
       >
         <v-card-actions v-if="miniVariant === true" class="ma-0 pa-0 mx-4 mt-2">
-          <v-icon class="error--text" small left> mdi-pound-box </v-icon>
-          <span class="overline text-truncate">Non-Fiction</span>
+          <v-icon
+            :class="type === 'fiksi' ? 'purple--text' : 'error--text'"
+            small
+            left
+          >
+            mdi-pound-box
+          </v-icon>
+          <span class="overline text-truncate" v-text="type"></span>
         </v-card-actions>
         <v-card-actions v-else class="mb-2 d-flex align-center">
           <v-avatar color="secondary" size="30" class="ma-2">
@@ -95,6 +101,7 @@ export default {
   data: () => ({
     title: 'Ano hi mita hana no namae wo bokutachi wa mada shiranai',
     text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi laudantium nisi tempora iure rerum, facilis saepe pariatur fugiat quas explicabo autem id eveniet distinctio porro quos eius, natus aspernatur dolore, repellendus laboriosam molestiae ipsum aut accusamus. Pariatur, necessitatibus et. Sequi ullam neque facere maiores? Nemo, corrupti ipsum sapiente ad reprehenderit placeat nobis similique modi, eaque distinctio repudiandae! Dolorem maxime neque vero iste suscipit animi deleniti, deserunt facilis hic, architecto assumenda nulla aut ipsam, qui perferendis ut praesentium amet? Porro, cupiditate voluptate deserunt aut assumenda quo aliquam quasi reprehenderit eius est beatae excepturi eum corporis odio dignissimos modi id vitae veritatis.',
+    type: 'Non-Fiksi',
   }),
 }
 </script>
