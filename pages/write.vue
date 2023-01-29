@@ -20,9 +20,9 @@
                   v-if="file"
                   height="100%"
                   cover
-                  :src="imagePreview"
+                  :src="paper.image_cover"
                 ></v-img>
-                <v-icon style="inset: 0; position: absolute" v-else x-large>
+                <v-icon v-else style="inset: 0; position: absolute" x-large>
                   mdi-plus-box
                 </v-icon>
               </v-sheet>
@@ -32,22 +32,23 @@
               <v-text-field
                 outlined
                 dense
-                v-model="title"
+                v-model="paper.title"
                 label="Judul"
                 hint="Pilih judul yang sesuai dan menarik pembaca"
                 persistent-hint
+                required
               ></v-text-field>
-              <v-radio-group class="my-0" v-model="radios" row mandatory>
+              <v-radio-group class="my-0" v-model="paper.type" row mandatory>
                 <v-radio
                   label="Non-Fiksi"
-                  value="non-fiction"
+                  value="Non-Fiksi"
                   off-icon="mdi-pound-box"
                   on-icon="mdi-pound-box"
                   color="error"
                 ></v-radio>
                 <v-radio
                   label="Fiksi"
-                  value="fiction"
+                  value="Fiksi"
                   off-icon="mdi-pound-box"
                   on-icon="mdi-pound-box"
                   color="purple"
@@ -64,7 +65,7 @@
                 hint="Pilih (max. 5) kategori yang paling sesuai"
                 :counter="5"
                 persistent-hint
-                v-model="select"
+                v-model="paper.hashtag_list"
                 :items="items"
                 label="Kategori"
               ></v-autocomplete>
@@ -87,15 +88,15 @@
           <v-row>
             <v-col cols="12">
               <client-only>
-                <tiptap-editor v-model="content" />
+                <tiptap-editor v-model="paper.text" />
               </client-only>
               <div class="content">
                 <h3>Content</h3>
-                <pre><code>{{ content }}</code></pre>
+                <pre><code>{{ paper.text }}</code></pre>
               </div>
               <div class="content">
                 <h3>Content</h3>
-                <p v-html="content"></p>
+                <p v-html="paper.text"></p>
               </div>
               <!-- <v-sheet outlined class="py-4" rounded="lg">
                 <div id="codex-editor"/>
@@ -124,7 +125,9 @@
           </v-row>
         </v-card-text>
         <v-card-actions>
-          <Dialog />
+          <v-btn :disabled="!paper.title || !paper.text" @click="addPaper">
+            Kirim
+          </v-btn>
         </v-card-actions>
       </v-card>
     </v-col>
@@ -134,18 +137,25 @@
 <script>
 import Dialog from '../components/Dialog.vue'
 import TiptapEditor from '~/components/TiptapEditor.vue'
+// import { mapMutations } from 'vuex'
 
 export default {
   layout: 'default',
   data: () => ({
-    content:
-      '<p>A Vue.js wrapper component for tiptap to use <code>v-model</code>.</p>',
-    radios: 'non-fiction',
-    title: null,
-    text: null,
-    select: null,
     file: null,
-    imagePreview: null,
+    paper: {
+      image_cover: null,
+      title: null,
+      text: null,
+      type: null,
+      hashtags: [],
+      writer_id: 1,
+      reader_id: [],
+      favorite_count: null,
+      bookshelf_count: null,
+      created_at: '21 Desember 2012',
+      updated_at: '21 Desember 2012',
+    },
     items: [
       'Teknologi',
       'Sains',
@@ -181,6 +191,26 @@ export default {
     },
   },
   methods: {
+    addPaper() {
+      this.paper.id = Math.random();
+      if (this.paper.image_cover === null) this.paper.image_cover = 'https://picsum.photos/400/640?random';
+      console.log(this.paper);
+      this.$store.commit('papers/add', this.paper)
+      this.file = null;
+      this.paper = {
+        image_cover: null,
+        title: null,
+        text: null,
+        type: null,
+        hashtag_list: null,
+        writer_id: 1,
+        reader_list: [1, 2, 3, 4, 5],
+        favorite: 20,
+        bookshelf: 21,
+        created_at: '21 Desember 2012',
+        updated_at: '21 Desember 2012',
+      };
+    },
     upload() {
       this.$v.$touch()
       // this.$router.push('/home')
@@ -194,7 +224,7 @@ export default {
     },
     fileToImage() {
       if (this.file) {
-        this.imagePreview = URL.createObjectURL(this.file)
+        this.paper.image_cover = URL.createObjectURL(this.file)
       }
     },
   },

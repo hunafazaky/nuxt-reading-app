@@ -1,14 +1,18 @@
 <template>
   <v-row justify="center">
     <v-col cols="10" sm="6" md="5">
-      <template v-for="paper in papers">
+      <template v-if="papers.length > 0">
         <PaperPreview
+          v-for="paper in papers"
           :key="paper.id"
           class="mx-auto"
           :paper="paper"
           :wordLimit="{ title: 150, text: 400 }"
           :miniVariant="false"
         />
+      </template>
+      <template v-else>
+        <p class="overline text-center text-secondary ma-4">No Data</p>
       </template>
     </v-col>
     <v-col cols="10" sm="6" md="5">
