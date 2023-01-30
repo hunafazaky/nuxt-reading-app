@@ -24,7 +24,7 @@
       >
         <v-card-actions v-if="miniVariant === true" class="ma-0 pa-0 mx-4 mt-2">
           <v-icon
-            :class="type === 'fiksi' ? 'purple--text' : 'error--text'"
+            :class="paper.type === 'Fiksi' ? 'purple--text' : 'error--text'"
             small
             left
           >
@@ -41,12 +41,17 @@
             v-text="user.profile.name"
           ></span>
           <v-spacer></v-spacer>
-          <v-icon class="error--text ma-2"> mdi-pound-box </v-icon>
+          <v-icon
+            class="ma-2"
+            :class="paper.type === 'Fiksi' ? 'purple--text' : 'error--text'"
+          >
+            mdi-pound-box
+          </v-icon>
         </v-card-actions>
         <v-card-text
           class="title text-capitalize"
           :class="miniVariant === true ? 'caption font-weight-bold' : ''"
-          v-text="
+          v-html="
             paper.title.length > wordLimit.title
               ? paper.title.slice(0, wordLimit.title) + '...'
               : paper.title
@@ -55,7 +60,7 @@
         <v-card-text
           v-if="miniVariant === false"
           class="text-caption"
-          v-text="
+          v-html="
             paper.text.length > wordLimit.text
               ? paper.text.slice(0, wordLimit.text) + '...'
               : paper.text

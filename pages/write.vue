@@ -192,11 +192,12 @@ export default {
   },
   methods: {
     addPaper() {
-      this.paper.id = Math.random();
-      if (this.paper.image_cover === null) this.paper.image_cover = 'https://picsum.photos/400/640?random';
-      console.log(this.paper);
+      this.paper.id = Math.random()
+      if (this.paper.image_cover === null)
+        this.paper.image_cover = 'https://picsum.photos/400/640?random'
+      console.log(this.paper)
       this.$store.commit('papers/add', this.paper)
-      this.file = null;
+      this.file = null
       this.paper = {
         image_cover: null,
         title: null,
@@ -209,7 +210,7 @@ export default {
         bookshelf: 21,
         created_at: '21 Desember 2012',
         updated_at: '21 Desember 2012',
-      };
+      }
     },
     upload() {
       this.$v.$touch()

@@ -150,19 +150,9 @@ export default {
           to: '/bookshelf',
         },
         {
-          icon: 'mdi-account-box-multiple',
-          title: 'Penulis Langganan',
-          to: '/subscribed',
-        },
-        {
           icon: 'mdi-text-box-plus',
           title: 'Tulis Sesuatu',
           to: '/write',
-        },
-        {
-          icon: 'mdi-pencil',
-          title: 'Todo',
-          to: '/todos',
         },
       ],
       miniVariant: false,
