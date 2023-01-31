@@ -62,7 +62,6 @@
         </template>
       </v-list>
     </v-navigation-drawer>
-
     <v-app-bar v-if="height <= 500" dark fixed app>
       <v-spacer />
       <v-text-field
@@ -98,13 +97,11 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-
     <v-main class="mb-12">
       <v-container>
         <Nuxt />
       </v-container>
     </v-main>
-
     <v-footer v-if="height <= 400" dark fixed app padless>
       <v-card flat tile width="100%" class="text-center">
         <v-card-text>
@@ -206,43 +203,3 @@ export default {
   cursor: zoom-out;
 }
 </style>
-
-<!-- SAMPAH -->
-
-<!-- <v-btn icon @click.stop="rightDrawer = !rightDrawer">
-  <v-icon>mdi-menu</v-icon>
-</v-btn> -->
-<!-- <v-app-bar-nav-icon @click.stop="drawer = !drawer" /> -->
-<!-- <v-btn icon @click.stop="miniVariant = !miniVariant">
-  <v-icon>mdi-{{ `chevron-${miniVariant ? 'right' : 'left'}` }}</v-icon>
-</v-btn> -->
-<!-- <v-btn icon @click.stop="clipped = !clipped">
-  <v-icon>mdi-application</v-icon>
-</v-btn> -->
-<!-- <v-card-text class="white--text">
-  {{ new Date().getFullYear() }} — <strong>Vuetify</strong>
-</v-card-text> -->
-<!-- <v-navigation-drawer 
-  v-model="rightDrawer"
-  temporary 
-  fixed
-  app
->
-  <h1 class="text-center ma-5">Reading App</h1>
-  <v-list>
-    <v-list-item
-      v-for="(item, i) in items"
-      :key="i"
-      :to="item.to"
-      router
-      exact
-    >
-      <v-list-item-action>
-        <v-icon>{{ item.icon }}</v-icon>
-      </v-list-item-action>
-      <v-list-item-content>
-        <v-list-item-title>{{ item.title }}</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-  </v-list>
-</v-navigation-drawer> -->

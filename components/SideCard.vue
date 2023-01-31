@@ -72,7 +72,7 @@
 
 <script>
 export default {
-  name: 'ActionCard',
+  name: 'SideCard',
   props: {
     bookmark: {
       type: Boolean,

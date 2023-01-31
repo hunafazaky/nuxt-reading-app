@@ -9,6 +9,7 @@ import { Editor, EditorContent } from '@tiptap/vue-2'
 import StarterKit from '@tiptap/starter-kit'
 
 export default {
+  name: 'TiptapEditor',
   components: {
     EditorContent,
   },

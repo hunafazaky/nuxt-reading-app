@@ -20,7 +20,7 @@
                   v-if="file"
                   height="100%"
                   cover
-                  :src="paper.image_cover"
+                  :src="post.image_cover"
                 ></v-img>
                 <v-icon v-else style="inset: 0; position: absolute" x-large>
                   mdi-plus-box
@@ -29,7 +29,7 @@
               <p class="caption text--secondary text-center">Preview</p>
             </v-col>
             <v-col cols="8" md="9">
-              <v-radio-group class="my-0" v-model="paper.type" mandatory>
+              <v-radio-group class="my-0" v-model="post.type" mandatory>
                 <template v-slot:label>
                   <div>Pilih jenis Karya Tulis</div>
                 </template>
@@ -62,7 +62,7 @@
                 hint="Pilih judul yang sesuai dan menarik pembaca"
                 persistent-hint
                 required
-                v-model="paper.title"
+                v-model="post.title"
               ></v-text-field>
               <v-autocomplete
                 outlined
@@ -77,7 +77,7 @@
                 persistent-hint
                 :counter="5"
                 :items="hashtags"
-                v-model="paper.hashtags"
+                v-model="post.hashtags"
               ></v-autocomplete>
               <v-file-input
                 outlined
@@ -99,7 +99,7 @@
             <v-col cols="12">
               <div>Tulis karyamu di kotak ini</div>
               <client-only>
-                <tiptap-editor v-model="paper.text" />
+                <tiptap-editor v-model="post.text" />
               </client-only>
               <!-- <v-sheet outlined class="py-4" rounded="lg">
                 <div id="codex-editor"/>
@@ -128,10 +128,10 @@
           </v-row>
         </v-card-text>
         <v-card-actions>
-          <v-btn 
-            class="ma-2 px-4" 
-            color="success" 
-            :disabled="!paper.title || !paper.text" 
+          <v-btn
+            class="ma-2 px-4"
+            color="success"
+            :disabled="!post.title || !post.text"
             @click="addPaper"
           >
             Unggah
@@ -152,8 +152,8 @@
 </template>
 
 <script>
-import Dialog from '../components/Dialog.vue'
 import TiptapEditor from '~/components/TiptapEditor.vue'
+// import Dialog from '../components/Dialog.vue'
 // import { mapMutations } from 'vuex'
 
 export default {
@@ -161,11 +161,11 @@ export default {
   data: () => ({
     file: null,
     success: false,
-    paper: {
+    post: {
       image_cover: null,
       title: null,
       text: null,
-      type: "Fiksi",
+      type: 'Fiksi',
       hashtags: [],
       writer_id: 1,
       reader_id: [],
@@ -191,23 +191,23 @@ export default {
       }
     },
     hashtags() {
-      const hashtag = [];
-      this.$store.state.hashtags.data.forEach(element => {
-        hashtag.push(element.name);
-      });
-      return hashtag;
+      const hashtags = []
+      this.$store.state.hashtags.data.forEach((element) => {
+        hashtags.push(element.name)
+      })
+      return hashtags
     },
   },
   methods: {
     addPaper() {
-      this.success = false;
-      this.paper.id = Math.random()
-      if (this.paper.image_cover === null)
-        this.paper.image_cover = '/temp-profile.webp'
-      console.log(this.paper)
-      this.$store.commit('papers/add', this.paper)
+      this.success = false
+      this.post.id = Math.random()
+      if (this.post.image_cover === null)
+        this.post.image_cover = '/temp-profile.webp'
+      console.log(this.post)
+      this.$store.commit('posts/add', this.post)
       this.file = null
-      this.paper = {
+      this.post = {
         image_cover: null,
         title: null,
         text: null,
@@ -224,10 +224,10 @@ export default {
     },
     fileToImage() {
       if (this.file) {
-        this.paper.image_cover = URL.createObjectURL(this.file)
+        this.post.image_cover = URL.createObjectURL(this.file)
       }
     },
   },
-  components: { Dialog, TiptapEditor },
+  components: { TiptapEditor },
 }
 </script>

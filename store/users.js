@@ -14,11 +14,11 @@ export const state = () => ({
         bio: 'Mahasiswa UIN Sunan Gunung Djati Bandung',
       },
       activities: {
-        writings: [1, 3, 4, 5, 6],
+        posts: [1, 3, 4, 5, 6],
+        favorite_post: [1, 2, 3, 4],
         readings: [1, 3, 4, 5, 6],
         writer_subs: [2, 3],
         reader_subs: [2, 3],
-        favorites: [1, 2, 3, 4],
         bookshelf: [1, 2, 3, 4],
       },
       created_at: '19 April 2022',

@@ -3,10 +3,10 @@
     <v-col class="pa-1" cols="12">
       <Hashtags />
     </v-col>
-    <template v-for="paper in papers">
-      <v-col :key="paper.id" class="px-1 py-0" cols="4" sm="4" md="3" xl="2">
-        <PaperPreview
-          :paper="paper"
+    <template v-for="post in posts">
+      <v-col :key="post.id" class="px-1 py-0" cols="4" sm="4" md="3" xl="2">
+        <PostCard
+          :post="post"
           :wordLimit="{ title: 100, text: 0 }"
           :miniVariant="true"
         />
@@ -16,7 +16,7 @@
 </template>
 
 <script>
-import PaperPreview from '../components/PaperPreview.vue'
+import PostCard from '../components/PostCard.vue'
 import Hashtags from '../components/Hashtags.vue'
 import { mapMutations } from 'vuex'
 
@@ -24,8 +24,8 @@ export default {
   name: 'Explore',
   data: () => ({}),
   computed: {
-    papers() {
-      return this.$store.state.papers.data
+    posts() {
+      return this.$store.state.posts.data
     },
   },
   methods: {
@@ -38,6 +38,10 @@ export default {
     ...mapMutations({
       toggle: 'todos/toggle',
     }),
+  },
+  components: {
+    PostCard,
+    Hashtags,
   },
 }
 </script>

@@ -19,32 +19,35 @@
     >
       <v-img
         height="100%"
-        :src="paper.image_cover"
+        :src="post.image_cover"
         gradient="to top, rgba(12.9, 12.9, 12.9, .25), rgba(12.9, 12.9, 12.9, 1)"
       >
         <v-card-actions v-if="miniVariant === true" class="ma-0 pa-0 mx-4 mt-2">
           <v-icon
-            class="mx-1"
-            :class="paper.type === 'Fiksi' ? 'purple--text' : 'error--text'"
+            :class="post.type === 'Fiksi' ? 'purple--text' : 'error--text'"
             small
             left
           >
             mdi-pound-box
           </v-icon>
-          <span class="overline text-truncate" v-text="paper.type"></span>
+          <span class="overline text-truncate" v-text="post.type"></span>
         </v-card-actions>
-        <v-card-actions v-else class="d-flex align-center">
-          <v-avatar color="secondary" size="30" class="ma-2">
-            <v-icon dark> mdi-account-circle </v-icon>
-          </v-avatar>
-          <span
-            class="font-weight-bold text-truncate"
-            v-text="user.profile.name"
-          ></span>
+        <v-card-actions v-else class="d-flex align-center pa-4">
+          <nuxt-link
+            :to="`/user/${writer.account.username}`"
+            class="text-decoration-none white--text text-truncate"
+          >
+            <v-avatar class="mr-1" color="white" size="28">
+              <v-img :src="writer.profile.image_profile"></v-img>
+            </v-avatar>
+            <span
+              class="font-weight-bold text-truncate"
+              v-text="writer.profile.name"
+            ></span>
+          </nuxt-link>
           <v-spacer></v-spacer>
           <v-icon
-            class="ma-2"
-            :class="paper.type === 'Fiksi' ? 'purple--text' : 'error--text'"
+            :class="post.type === 'Fiksi' ? 'purple--text' : 'error--text'"
           >
             mdi-pound-box
           </v-icon>
@@ -53,18 +56,18 @@
           class="title text-capitalize"
           :class="miniVariant === true ? 'caption font-weight-bold' : ''"
           v-html="
-            paper.title.length > wordLimit.title
-              ? paper.title.slice(0, wordLimit.title) + '...'
-              : paper.title
+            post.title.length > wordLimit.title
+              ? post.title.slice(0, wordLimit.title) + '...'
+              : post.title
           "
         ></v-card-text>
         <v-card-text
           v-if="miniVariant === false"
           class="text-caption"
           v-html="
-            paper.text.length > wordLimit.text
-              ? paper.text.slice(0, wordLimit.text) + '...'
-              : paper.text
+            post.text.length > wordLimit.text
+              ? post.text.slice(0, wordLimit.text) + '...'
+              : post.text
           "
         >
         </v-card-text>
@@ -73,7 +76,7 @@
             <v-btn fab small color="primary">
               <v-icon small> mdi-bookmark-plus </v-icon>
             </v-btn>
-            <v-btn fab small color="success" nuxt :to="`/${paper.id}/read`">
+            <v-btn fab small color="success" nuxt :to="`/post/${post.id}/read`">
               <v-icon small> mdi-book-open </v-icon>
             </v-btn>
           </div>
@@ -82,7 +85,7 @@
               <v-icon left>mdi-bookmark-plus</v-icon>
               simpan
             </v-btn>
-            <v-btn small color="success" nuxt :to="`/${paper.id}/read`">
+            <v-btn small color="success" nuxt :to="`/post/${post.id}/read`">
               <v-icon left>mdi-book-open</v-icon>
               lanjut baca
             </v-btn>
@@ -95,9 +98,9 @@
 
 <script>
 export default {
-  name: 'PaperPreview',
+  name: 'PostCard',
   props: {
-    paper: Object,
+    post: Object,
     wordLimit: Object,
     miniVariant: Boolean,
     size: {
@@ -110,16 +113,12 @@ export default {
       },
     },
   },
-  data: () => ({
-    title: 'Ano hi mita hana no namae wo bokutachi wa mada shiranai',
-    text: 'Lorem ipsum dolor sit amet consectetur adipisicing elit. Modi laudantium nisi tempora iure rerum, facilis saepe pariatur fugiat quas explicabo autem id eveniet distinctio porro quos eius, natus aspernatur dolore, repellendus laboriosam molestiae ipsum aut accusamus. Pariatur, necessitatibus et. Sequi ullam neque facere maiores? Nemo, corrupti ipsum sapiente ad reprehenderit placeat nobis similique modi, eaque distinctio repudiandae! Dolorem maxime neque vero iste suscipit animi deleniti, deserunt facilis hic, architecto assumenda nulla aut ipsam, qui perferendis ut praesentium amet? Porro, cupiditate voluptate deserunt aut assumenda quo aliquam quasi reprehenderit eius est beatae excepturi eum corporis odio dignissimos modi id vitae veritatis.',
-    type: 'Non-Fiksi',
-  }),
+  data: () => ({}),
   computed: {
-    user() {
-      return this.$store.state.users.data.filter(
-        (user) => user.id === this.paper.writer_id
-      )[0]
+    writer() {
+      return this.$store.state.users.data.find(
+        (user) => user.id === this.post.writer_id
+      )
     },
   },
 }

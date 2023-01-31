@@ -1,12 +1,12 @@
 <template>
   <v-row justify="center">
     <v-col cols="10" sm="6" md="5">
-      <template v-if="papers.length > 0">
-        <PaperPreview
-          v-for="paper in papers"
-          :key="paper.id"
+      <template v-if="posts.length > 0">
+        <PostCard
+          v-for="post in posts"
+          :key="post.id"
           class="mx-auto"
-          :paper="paper"
+          :post="post"
           :wordLimit="{ title: 150, text: 400 }"
           :miniVariant="false"
         />
@@ -22,7 +22,7 @@
 </template>
 
 <script>
-import PaperPreview from '../components/PaperPreview.vue'
+import PostCard from '../components/PostCard.vue'
 import SideCard from '../components/SideCard.vue'
 import { mapMutations } from 'vuex'
 
@@ -30,8 +30,8 @@ export default {
   name: 'Home',
   data: () => ({}),
   computed: {
-    papers() {
-      return this.$store.state.papers.data
+    posts() {
+      return this.$store.state.posts.data
     },
   },
   methods: {
@@ -45,17 +45,8 @@ export default {
       toggle: 'todos/toggle',
     }),
   },
+  components: {
+    PostCard,
+  },
 }
 </script>
-
-<!-- <v-card-title>
-  <v-btn class="pa-4 ma-4" nuxt fab>
-    <v-img
-      class="rounded-circle"
-      cover
-      aspect-ratio="1"
-      src="/icon.png"
-    ></v-img>
-  </v-btn>
-  <span class="font-weight-medium headline">Hunafa Zaky</span>
-</v-card-title> -->
