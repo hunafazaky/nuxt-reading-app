@@ -133,6 +133,7 @@ import TiptapEditor from '~/components/TiptapEditor.vue'
 export default {
   name: 'Write',
   data: () => ({
+    me: {},
     file: null,
     success: false,
     work: {
@@ -172,84 +173,40 @@ export default {
     },
   },
   methods: {
-    getUser() {
-      return this.$axios.get(`/users/63da9fa53946349787ffae30`)
+    getMe() {
+      this.me = this.$store.state.users.me
+    },
+    setWrittenBy() {
+      this.work.activity.written_by = {
+        id: this.me.id,
+        username: this.me.account.username,
+        img_profile: this.me.profile.img_profile,
+        pen_name: this.me.profile.pen_name,
+      }
     },
     async postNewWork() {
       if (this.work.content.img_cover === null)
         this.work.content.img_cover = '/temp-profile.webp'
-      await this.$axios
-        .get(`/users/63da9fa53946349787ffae30`)
-        .then((user) => {
-          console.log(user.data)
-          this.work.activity.written_by = {
-            id: user.data.id,
-            username: user.data.account.username,
-            img_profile: user.data.profile.img_profile,
-            pen_name: user.data.profile.pen_name,
-          }
-        })
-        .then(() => {
-          console.log(this.work)
-          this.$axios.post(`/works`, this.work)
-        })
-        .then(() => {
-          this.file = null
-          ;(this.work = {
-            content: {
-              img_cover: null,
-              title: null,
-              text: null,
-            },
-            keyword: {
-              type: 'Fiksi',
-              hashtags: [],
-            },
-            activity: { written_by: null },
-          }),
-            (this.success = true)
-          setTimeout(() => {
-            this.$router.push('/home')
-          }, 2000)
-        })
+      await this.$axios.post(`/works`, this.work).then(() => {
+        this.file = null
+        ;(this.work = {
+          content: {
+            img_cover: null,
+            title: null,
+            text: null,
+          },
+          keyword: {
+            type: 'Fiksi',
+            hashtags: [],
+          },
+          activity: { written_by: null },
+        }),
+          (this.success = true)
+        setTimeout(() => {
+          this.$router.push('/home')
+        }, 2000)
+      })
     },
-    // async addWork() {
-    //   // this.success = false;
-    //   if (this.work.image_cover === null)
-    //     this.work.image_cover = '/temp-profile.webp'
-    //   await this.$axios.get(`/users/63da9fa53946349787ffae30`)
-    //     .then((user) => {
-    //       this.work.activity.written_by = {
-    //         id: user.data.id,
-    //         username: user.data.account.username,
-    //         img_profile: user.data.profile.img_profile,
-    //         pen_name: user.data.profile.pen_name
-    //       }
-    //     })
-    //     .then(() => {
-    //       this.$axios.post(`/works`, this.work)
-    //     })
-    //     .then(() => {
-    //       this.file = null
-    //       this.work = {
-    //         content: {
-    //           img_cover: null,
-    //           title: null,
-    //           text: null,
-    //         },
-    //         keyword: {
-    //           type: 'Fiksi',
-    //           hashtags: [],
-    //         },
-    //       }
-
-    //       this.success = true
-    //       setTimeout(() => {
-    //         this.$route.push('/home');
-    //       }, 2000)
-    //     })
-    //   // this.$store.commit('works/add', this.work)
-    // },
     fileToImage() {
       if (this.file) {
         this.work.content.img_cover = URL.createObjectURL(this.file)
@@ -257,5 +214,9 @@ export default {
     },
   },
   components: { TiptapEditor },
+  mounted() {
+    this.getMe()
+    this.setWrittenBy()
+  },
 }
 </script>

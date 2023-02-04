@@ -33,13 +33,20 @@ import { mapMutations } from 'vuex'
 
 export default {
   name: 'Explore',
-  data: () => ({}),
-  computed: {
-    works() {
-      return this.$store.state.works.data
-    },
-  },
+  data: () => ({
+    me: {},
+    works: {},
+  }),
+  computed: {},
   methods: {
+    getMe() {
+      this.me = this.$store.state.users.me
+    },
+    getWorks() {
+      this.$axios.get(`/works`).then((works) => {
+        this.works = works.data
+      })
+    },
     addTodo(e) {
       console.log(e.target.value)
       console.log(this.todos)
@@ -53,6 +60,10 @@ export default {
   components: {
     WorkCard,
     Hashtags,
+  },
+  mounted() {
+    this.getMe()
+    this.getWorks()
   },
 }
 </script>

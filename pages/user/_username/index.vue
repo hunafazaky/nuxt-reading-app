@@ -1,8 +1,11 @@
 <template>
+  <!-- <div>
+    {{ user.profile?.img_profile }}
+  </div> -->
   <v-row justify="center" align="center">
     <PopZoom
       maxWidth="500px"
-      :image="user.profile.image_profile"
+      :image="user.profile?.img_profile"
       :showPopZoom="showPopZoom"
       @hidePopZoom="showPopZoom = false"
     />
@@ -19,21 +22,26 @@
           style="inset: 0; position: absolute"
           @click="showPopZoom = true"
         >
-          <v-img :src="user.profile.image_profile"></v-img>
+          <v-img :src="user.profile?.img_profile"></v-img>
         </v-avatar>
       </v-sheet>
     </v-col>
     <v-col cols="8">
       <v-card rounded="lg" outlined>
         <v-card-title>
-          <p class="my-1 text-capitalize" v-text="user.profile.name"></p>
+          <p class="my-1 text-capitalize" v-text="user.profile?.pen_name"></p>
+          <v-divider></v-divider>
+          <p class="my-1 font-weight-light text-capitalize">Username</p>
         </v-card-title>
         <v-divider></v-divider>
         <v-card-text>
           <div class="d-flex">
             <p class="my-1 font-weight-light text-capitalize">Username</p>
             <v-spacer></v-spacer>
-            <p class="my-1 font-weight-bold" v-text="user.account.username"></p>
+            <p
+              class="my-1 font-weight-bold"
+              v-text="user.account?.username"
+            ></p>
           </div>
           <div class="d-flex">
             <p class="my-1 font-weight-light text-capitalize">
@@ -42,7 +50,7 @@
             <v-spacer></v-spacer>
             <p
               class="my-1 font-weight-bold"
-              v-text="user.activities.writer_subs.length"
+              v-text="user.activity?.sub_writers.length"
             ></p>
           </div>
           <div class="d-flex">
@@ -50,7 +58,7 @@
             <v-spacer></v-spacer>
             <p
               class="my-1 font-weight-bold"
-              v-text="user.activities.reader_subs.length"
+              v-text="user.activity?.sub_readers.length"
             ></p>
           </div>
           <div class="d-flex">
@@ -60,7 +68,7 @@
             <v-spacer></v-spacer>
             <p
               class="my-1 font-weight-bold"
-              v-text="user.activities.posts.length"
+              v-text="user.activity?.writings.length"
             ></p>
           </div>
         </v-card-text>
@@ -70,10 +78,14 @@
       <v-card rounded="lg" outlined width="100%">
         <v-card-title class="ma-2">Karya Tulis Saya</v-card-title>
         <v-card-text>
-          <v-row justify="start" class="px-4 py-1" v-if="posts.length > 0">
+          <v-row
+            justify="start"
+            class="px-4 py-1"
+            v-if="user.activity?.writings.length > 0"
+          >
             <v-col
-              v-for="post in posts"
-              :key="post.id"
+              v-for="work_id in user.activity?.writings"
+              :key="work_id"
               class="px-1 py-0"
               cols="4"
               sm="4"
@@ -81,7 +93,7 @@
               xl="2"
             >
               <WorkCard
-                :post="post"
+                :work="getWorkById(work_id)"
                 :wordLimit="{ title: 100, text: 0 }"
                 :miniVariant="true"
               />
@@ -105,18 +117,33 @@ export default {
   name: 'User',
   data: () => ({
     showPopZoom: false,
+    user: {},
+    work: {},
   }),
   computed: {
-    user() {
-      return this.$store.state.users.data.find(
-        (user) => user.account.username === this.$route.params.username
-      )
-    },
-    posts() {
-      return this.$store.state.posts.data
-    },
+    // user() {
+    //   return this.$store.state.users.data.find(
+    //     (user) => user.account?.username === this.$route.params.username
+    //   )
+    // },
+    // works() {
+    //   return this.$store.state.works.data
+    // },
   },
   methods: {
+    getUserByUsername() {
+      this.$axios
+        .get(`/users?username=${this.$route.params.username}`)
+        .then((user) => {
+          this.user = user.data[0]
+        })
+    },
+    getWorkById(work_id) {
+      this.$axios.get(`/works/${work_id}`).then((work) => {
+        this.work = work.data
+      })
+      return this.work
+    },
     addTodo(e) {
       console.log(e.target.value)
       console.log(this.todos)
@@ -126,6 +153,9 @@ export default {
     ...mapMutations({
       toggle: 'todos/toggle',
     }),
+  },
+  created() {
+    this.getUserByUsername()
   },
 }
 </script>

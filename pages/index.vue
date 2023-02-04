@@ -172,6 +172,8 @@ export default {
         .then((user) => {
           console.log(user.data[0])
           this.$store.commit('users/login', user.data[0])
+        })
+        .then(() => {
           this.$router.push('/home')
         })
         .catch((err) => {
@@ -195,13 +197,6 @@ export default {
           console.log(err)
         })
     },
-    // clear() {
-    //   this.$v.$reset()
-    //   this.username = ''
-    //   this.email = ''
-    //   this.select = null
-    //   this.checkbox = false
-    // },
   },
 }
 </script>

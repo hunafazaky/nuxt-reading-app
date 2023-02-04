@@ -1,9 +1,12 @@
 <template>
-  <v-row :justify="works.length > 0 ? 'start' : 'center'" class="px-4 py-1">
-    <template v-if="works.length > 0">
+  <v-row
+    :justify="me.activity?.bookshelf.length > 0 ? 'start' : 'center'"
+    class="px-4 py-1"
+  >
+    <template v-if="me.activity?.bookshelf.length > 0">
       <v-col
-        v-for="work in works"
-        :key="work.id"
+        v-for="work_id in me.activity?.bookshelf"
+        :key="work_id"
         class="px-1 py-0"
         cols="4"
         sm="4"
@@ -11,7 +14,7 @@
         xl="2"
       >
         <WorkCard
-          :work="work"
+          :work="getWorkById(work_id)"
           :wordLimit="{ title: 100, text: 0 }"
           :miniVariant="true"
         />
@@ -29,13 +32,20 @@ import { mapMutations } from 'vuex'
 
 export default {
   name: 'Bookshelf',
-  data: () => ({}),
-  computed: {
-    works() {
-      return this.$store.state.works.data
-    },
-  },
+  data: () => ({
+    me: {},
+  }),
+  computed: {},
   methods: {
+    getMe() {
+      this.me = this.$store.state.users.me
+    },
+    getWorkById(work_id) {
+      this.$axios.get(`/works/${work_id}`).then((work) => {
+        this.work = work.data
+      })
+      return this.work
+    },
     addTodo(e) {
       console.log(e.target.value)
       console.log(this.todos)
@@ -48,6 +58,9 @@ export default {
   },
   components: {
     WorkCard,
+  },
+  mounted() {
+    this.getMe()
   },
 }
 </script>
