@@ -3,42 +3,49 @@
     :justify="me.activity?.bookshelf.length > 0 ? 'start' : 'center'"
     class="px-4 py-1"
   >
-    <template v-if="me.activity?.bookshelf.length > 0">
-      <v-col
-        v-for="work_id in me.activity?.bookshelf"
-        :key="work_id"
-        class="px-1 py-0"
-        cols="4"
-        sm="4"
-        md="3"
-        xl="2"
-      >
-        <WorkCard
-          :work="getWorkById(work_id)"
-          :wordLimit="{ title: 100, text: 0 }"
-          :miniVariant="true"
-        />
-      </v-col>
-    </template>
-    <template v-else>
-      <p class="overline text-center text-secondary ma-4">Kosong</p>
+    <LoadingComponent v-if="loading" :loading="loading" />
+    <template v-if="!loading">
+      <template v-if="me.activity?.bookshelf.length > 0">
+        <v-col
+          v-for="work_id in me.activity?.bookshelf"
+          :key="work_id"
+          class="px-1 py-0"
+          cols="4"
+          sm="4"
+          md="3"
+          xl="2"
+        >
+          <WorkCard
+            :work="getWorkById(work_id)"
+            :wordLimit="{ title: 100, text: 0 }"
+            :miniVariant="true"
+          />
+        </v-col>
+      </template>
+      <template v-else>
+        <p class="overline text-center text-secondary ma-4">Kosong</p>
+      </template>
     </template>
   </v-row>
 </template>
 
 <script>
 import WorkCard from '../components/WorkCard.vue'
+import LoadingComponent from '../components/LoadingComponent.vue'
 import { mapMutations } from 'vuex'
 
 export default {
   name: 'Bookshelf',
   data: () => ({
     me: {},
+    loading: true,
   }),
   computed: {},
   methods: {
     getMe() {
       this.me = this.$store.state.users.me
+      if (!this.me.id) this.$router.push('/')
+      else this.loading = false
     },
     getWorkById(work_id) {
       this.$axios.get(`/works/${work_id}`).then((work) => {
@@ -58,9 +65,11 @@ export default {
   },
   components: {
     WorkCard,
+    LoadingComponent,
   },
   mounted() {
     this.getMe()
+    if (!this.me.account) this.$router.push('/')
   },
 }
 </script>

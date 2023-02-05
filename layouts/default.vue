@@ -46,7 +46,7 @@
           <v-list-item
             v-bind="attrs"
             v-on="on"
-            :to="`/user/${me.account.username}`"
+            :to="`/user/${me.account?.username}`"
             router
             exact
           >
@@ -57,7 +57,7 @@
             </v-list-item-action>
             <v-list-item-content>
               <v-list-item-title
-                v-text="me.account.username"
+                v-text="me.account?.username"
               ></v-list-item-title>
             </v-list-item-content>
           </v-list-item>
@@ -89,12 +89,12 @@
         <template v-slot:activator="{ on, attrs }">
           <v-btn icon v-bind="attrs" v-on="on">
             <v-avatar class="mr-1" color="white" size="24">
-              <v-img :src="me.profile.img_profile"></v-img>
+              <v-img :src="me.profile?.img_profile"></v-img>
             </v-avatar>
           </v-btn>
         </template>
         <v-list dark>
-          <v-list-item :to="`/user/${me.account.username}`" router exact>
+          <v-list-item :to="`/user/${me.account?.username}`" router exact>
             <v-list-item-title>
               <v-icon small left>mdi-account-circle</v-icon>
               Profile</v-list-item-title

@@ -47,9 +47,9 @@
           class="mb-0"
           type="error"
           transition="slide-y-transition"
-          :value="usernameTaken"
+          :value="errorMessage"
         >
-          Username sudah terdaftar!!
+          {{ message }}
         </v-alert>
         <span v-if="form_title == 'Registrasi'" class="caption text--secondary"
           >Sudah punya akun?
@@ -77,24 +77,8 @@
 </style>
 
 <script>
-// import { validationMixin } from 'vuelidate'
-// import { required, maxLength, minLength, email } from 'vuelidate/lib/validators'
-
 export default {
   layout: 'login',
-  // mixins: [validationMixin],
-  // validations: {
-  //   username: { required, maxLength: maxLength(12) },
-  //   password: { required, minLength: minLength(8) },
-  //   email: { required, email },
-  //   select: { required },
-  //   checkbox: {
-  //     checked(val) {
-  //       return val
-  //     },
-  //   },
-  // },
-
   data: () => ({
     user: {
       account: {
@@ -103,7 +87,8 @@ export default {
       },
     },
     form_title: 'Registrasi',
-    usernameTaken: false,
+    errorMessage: false,
+    message: '',
   }),
 
   computed: {
@@ -121,41 +106,6 @@ export default {
           return 800
       }
     },
-    // checkboxErrors() {
-    //   const errors = []
-    //   if (!this.$v.checkbox.$dirty) return errors
-    //   !this.$v.checkbox.checked && errors.push('You must agree to continue!')
-    //   return errors
-    // },
-    // selectErrors() {
-    //   const errors = []
-    //   if (!this.$v.select.$dirty) return errors
-    //   !this.$v.select.required && errors.push('Item is required')
-    //   return errors
-    // },
-    // usernameErrors() {
-    //   const errors = []
-    //   if (!this.$v.username.$dirty) return errors
-    //   !this.$v.username.maxLength &&
-    //     errors.push('Username must be at most 12 characters long')
-    //   !this.$v.username.required && errors.push('Username is required.')
-    //   return errors
-    // },
-    // emailErrors() {
-    //   const errors = []
-    //   if (!this.$v.email.$dirty) return errors
-    //   !this.$v.email.email && errors.push('Must be valid e-mail')
-    //   !this.$v.email.required && errors.push('E-mail is required')
-    //   return errors
-    // },
-    // passwordErrors() {
-    //   const errors = []
-    //   if (!this.$v.password.$dirty) return errors
-    //   !this.$v.password.minLength &&
-    //     errors.push('Password must be at least 8 characters long')
-    //   !this.$v.password.required && errors.push('Password is required.')
-    //   return errors
-    // },
   },
 
   methods: {
@@ -165,29 +115,24 @@ export default {
     openRegisForm() {
       this.form_title = 'Registrasi'
     },
-    async login() {
-      console.log(this.user.account.username)
-      await this.$axios
+    login() {
+      this.$axios
         .get(`/users?username=${this.user.account.username}`)
         .then((user) => {
-          console.log(user.data[0])
           this.$store.commit('users/login', user.data[0])
-        })
-        .then(() => {
           this.$router.push('/home')
         })
         .catch((err) => {
           console.log(err)
         })
     },
-    async regis() {
-      // const getByUsername = await this.$axios.get(`/users?username=${this.user.account.username}`)
-      // console.log(getByUsername.data);
-      await this.$axios
+    regis() {
+      this.$axios
         .post(`/users`, this.user)
         .then((user) => {
           if (user.data.message) {
-            this.usernameTaken = true
+            this.errorMessage = true
+            this.message = user.data.message
           } else {
             this.$store.commit('users/login', user.data[0])
             this.$router.push('/home')

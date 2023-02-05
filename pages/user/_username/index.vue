@@ -1,13 +1,15 @@
 <template>
-  <!-- <div>
-    {{ user.profile?.img_profile }}
-  </div> -->
   <v-row justify="center" align="center">
     <PopZoom
       maxWidth="500px"
       :image="user.profile?.img_profile"
       :showPopZoom="showPopZoom"
       @hidePopZoom="showPopZoom = false"
+    />
+    <PopZoom
+      :image="user.profile?.img_profile"
+      :showPopConfirm="showPopConfirm"
+      @hidePopConfirm="showPopConfirm = false"
     />
     <v-col cols="4">
       <v-sheet
@@ -111,12 +113,14 @@
 <script>
 import WorkCard from '../../../components/WorkCard.vue'
 import PopZoom from '../../../components/PopZoom.vue'
+import PopConfirm from '../../../components/PopConfirm.vue'
 import { mapMutations } from 'vuex'
 
 export default {
   name: 'User',
   data: () => ({
     showPopZoom: false,
+    showPopConfirm: false,
     user: {},
     work: {},
   }),
@@ -131,6 +135,9 @@ export default {
     // },
   },
   methods: {
+    getMe() {
+      this.me = this.$store.state.users.me
+    },
     getUserByUsername() {
       this.$axios
         .get(`/users?username=${this.$route.params.username}`)
@@ -154,8 +161,11 @@ export default {
       toggle: 'todos/toggle',
     }),
   },
-  created() {
+  mounted() {
     this.getUserByUsername()
+    this.getMe()
+    if (!this.me.account) this.$router.push('/')
   },
+  component: { PopZoom, PopConfirm },
 }
 </script>

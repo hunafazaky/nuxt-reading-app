@@ -134,6 +134,7 @@ export default {
   name: 'Write',
   data: () => ({
     me: {},
+    loading: true,
     file: null,
     success: false,
     work: {
@@ -175,19 +176,25 @@ export default {
   methods: {
     getMe() {
       this.me = this.$store.state.users.me
-    },
-    setWrittenBy() {
-      this.work.activity.written_by = {
-        id: this.me.id,
-        username: this.me.account.username,
-        img_profile: this.me.profile.img_profile,
-        pen_name: this.me.profile.pen_name,
+      if (!this.me.id) this.$router.push('/')
+      else {
+        this.loading = false
       }
     },
-    async postNewWork() {
+    setWrittenBy() {
+      if (this.me.id) {
+        this.work.activity.written_by = {
+          id: this.me.id,
+          username: this.me.account.username,
+          img_profile: this.me.profile.img_profile,
+          pen_name: this.me.profile.pen_name,
+        }
+      }
+    },
+    postNewWork() {
       if (this.work.content.img_cover === null)
         this.work.content.img_cover = '/temp-profile.webp'
-      await this.$axios.post(`/works`, this.work).then(() => {
+      this.$axios.post(`/works`, this.work).then(() => {
         this.file = null
         ;(this.work = {
           content: {
@@ -218,5 +225,6 @@ export default {
     this.getMe()
     this.setWrittenBy()
   },
+  created() {},
 }
 </script>

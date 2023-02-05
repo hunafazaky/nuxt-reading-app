@@ -22,16 +22,6 @@
         :src="work.content.img_cover"
         gradient="to top, rgba(12.9, 12.9, 12.9, .25), rgba(12.9, 12.9, 12.9, 1)"
       >
-        <!-- <v-card-actions v-if="miniVariant === true" class="ma-0 pa-0 mx-4 mt-2">
-          <v-icon
-            :class="work.type === 'Fiksi' ? 'purple--text' : 'error--text'"
-            small
-            left
-          >
-            mdi-pound-box
-          </v-icon>
-          <span class="overline text-truncate" v-text="work.type"></span>
-        </v-card-actions> -->
         <v-card-actions
           v-if="miniVariant === false"
           class="d-flex align-center pa-4"
@@ -90,18 +80,30 @@
             >
               <v-icon> mdi-text-box-search </v-icon>
             </v-btn>
-            <v-btn
-              icon
-              class="mb-1"
-              color="warning"
-              nuxt
-              :to="`/work/${work.id}/edit`"
+            <template
+              v-if="
+                mutation === true &&
+                work.activity.written_by.username === me.account?.username
+              "
             >
-              <v-icon> mdi-text-box-edit </v-icon>
-            </v-btn>
-            <v-btn icon class="mb-1" color="error" @click="removeWork(work)">
-              <v-icon> mdi-text-box-remove </v-icon>
-            </v-btn>
+              <v-btn
+                icon
+                class="mb-1"
+                color="warning"
+                nuxt
+                :to="`/work/${work.id}/edit`"
+              >
+                <v-icon> mdi-text-box-edit </v-icon>
+              </v-btn>
+              <v-btn
+                icon
+                class="mb-1"
+                color="error"
+                @click="$emit('removeWork', work.id)"
+              >
+                <v-icon> mdi-text-box-remove </v-icon>
+              </v-btn>
+            </template>
           </div>
           <div class="mx-2 absolute bottom" v-else>
             <v-btn small color="primary">
@@ -126,6 +128,7 @@ export default {
     work: Object,
     wordLimit: Object,
     miniVariant: Boolean,
+    mutation: Boolean,
     size: {
       type: Object,
       default() {
@@ -136,18 +139,24 @@ export default {
       },
     },
   },
-  data: () => ({}),
-  computed: {
-    writer() {
-      return this.$store.state.users.data.find(
-        (user) => user.id === this.work.writer_id
-      )
-    },
-  },
+  data: () => ({
+    me: {},
+  }),
+  computed: {},
   methods: {
-    removeWork(work) {
-      this.$store.commit('works/remove', work)
+    getMe() {
+      this.me = this.$store.state.users.me
+      if (!this.me.id) this.$router.push('/')
+      // else this.loading.me = false
     },
+    // removeWork(work_id) {
+    // this.$store.commit('works/remove', work)
+    // this.$axios.delete(`/works/${work_id}`)
+    //   this.$emit('removeWork', work_id)
+    // },
+  },
+  mounted() {
+    this.getMe()
   },
 }
 </script>

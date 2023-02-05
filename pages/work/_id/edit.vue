@@ -137,6 +137,7 @@ export default {
   },
   name: 'Edit',
   data: () => ({
+    me: {},
     file: null,
     success: false,
     // work: {},
@@ -165,18 +166,16 @@ export default {
     },
   },
   methods: {
-    async putWork() {
-      await this.$axios.put(`/works/${this.work.id}`, this.work).then(
-        () => {
-          this.success = true
-          setTimeout(() => {
-            this.success = false
-          }, 2000)
-        }
-        // (onRejected) => {
-        //     // Some task on failure
-        // }
-      )
+    getMe() {
+      this.me = this.$store.state.users.me
+    },
+    putWork() {
+      this.$axios.put(`/works/${this.work.id}`, this.work).then(() => {
+        this.success = true
+        setTimeout(() => {
+          this.$router.push('/home')
+        }, 2000)
+      })
     },
     fileToImage() {
       if (this.file) {
@@ -185,11 +184,9 @@ export default {
     },
   },
   components: { TiptapEditor },
-  // created() {
-  //   const data = this.$store.state.works.data.find(
-  //     (work) => work.id == this.$route.params.id
-  //   )
-  //   this.work = { ...data }
-  // },
+  mounted() {
+    this.getMe()
+    if (!this.me) this.$router.push('/')
+  },
 }
 </script>

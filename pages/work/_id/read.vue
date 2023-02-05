@@ -102,6 +102,7 @@ export default {
   },
   name: 'Read',
   data: () => ({
+    me: {},
     showPopZoom: false,
   }),
   computed: {
@@ -119,13 +120,11 @@ export default {
           return 800
       }
     },
-    // work() {
-    //   return this.$store.state.works.data.find(
-    //     (work) => work.id == this.$route.params.id
-    //   )
-    // },
   },
   methods: {
+    getMe() {
+      this.me = this.$store.state.users.me
+    },
     hashtag(id) {
       return this.$store.state.hashtags.data.find((hashtag) => hashtag.id == id)
     },
@@ -134,5 +133,9 @@ export default {
     },
   },
   components: { PopZoom },
+  mounted() {
+    this.getMe()
+    if (!this.me.account) this.$router.push('/')
+  },
 }
 </script>
