@@ -72,7 +72,7 @@
         </template>
       </v-list>
     </v-navigation-drawer>
-    <v-app-bar v-if="height <= 500" dark fixed app>
+    <!-- <v-app-bar v-if="height <= 500" dark fixed app>
       <v-spacer />
       <v-text-field
         class="ma-2"
@@ -108,7 +108,7 @@
           </v-list-item>
         </v-list>
       </v-menu>
-    </v-app-bar>
+    </v-app-bar> -->
     <v-main class="mb-12">
       <v-container>
         <Nuxt />

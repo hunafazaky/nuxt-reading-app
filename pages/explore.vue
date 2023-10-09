@@ -18,7 +18,7 @@
           <WorkCard
             :work="work"
             :wordLimit="{ title: 100, text: 0 }"
-            :miniVariant="true"
+            :miniVariant="false"
             :mutation="false"
           />
         </v-col>

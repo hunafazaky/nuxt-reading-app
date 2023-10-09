@@ -2,16 +2,16 @@
   <v-row justify="space-between">
     <PopZoom
       maxWidth="500px"
-      :image="work.content.img_cover"
+      :image="work.cover"
       :showPopZoom="showPopZoom"
       @hidePopZoom="showPopZoom = false"
     />
     <v-col class="my-5" cols="12" md="7">
       <h1
         class="headline font-weight-medium text--secondary"
-        v-text="work.content.title"
+        v-text="work.title"
       ></h1>
-      <p class="subtitle-1 my-5" v-html="work.content.text"></p>
+      <p class="subtitle-1 my-5" v-html="work.text"></p>
     </v-col>
     <v-col class="my-5" cols="12" md="4">
       <v-card rounded="lg" outlined>
@@ -33,7 +33,7 @@
                   style="inset: 0; position: absolute"
                   height="100%"
                   cover
-                  :src="work.content.img_cover"
+                  :src="work.cover"
                 ></v-img>
               </v-sheet>
             </v-col>
@@ -41,34 +41,29 @@
               <div class="my-5">
                 <p class="caption font-weight-bold my-0">Penulis :</p>
                 <nuxt-link
-                  :to="`../../user/${work.activity.written_by.username}`"
+                  :to="`../../user/${work.writer.username}`"
                   class="text-decoration-none"
                 >
                   <div
                     class="caption text-truncate text-capitalize font-weight-medium"
-                    v-text="work.activity.written_by.pen_name"
+                    v-text="work.writer.pen_name"
                   ></div>
                 </nuxt-link>
               </div>
               <div class="my-5">
                 <p class="caption font-weight-bold my-0">Tipe :</p>
                 <v-icon
-                  class="mx-0"
-                  :class="
-                    work.keyword.type === 'Fiksi'
-                      ? 'purple--text'
-                      : 'error--text'
-                  "
+                  class="mx-0 purple--text"
                   left
                 >
                   mdi-pound-box
                 </v-icon>
                 <span
                   class="overline text-truncate"
-                  v-text="work.keyword.type"
+                  v-text="work.category[0]"
                 ></span>
               </div>
-              <div class="my-5" v-if="work.keyword.hashtags.length > 0">
+              <!-- <div class="my-5" v-if="work.keyword.hashtags.length > 0">
                 <p class="caption font-weight-bold my-0">Tagar :</p>
                 <v-chip-group column class="mb-4">
                   <v-chip
@@ -83,7 +78,7 @@
                     <span class="text-capitalize" v-text="hashtag"></span>
                   </v-chip>
                 </v-chip-group>
-              </div>
+              </div> -->
             </v-col>
           </v-row>
         </v-card-text>
@@ -135,7 +130,7 @@ export default {
   components: { PopZoom },
   mounted() {
     this.getMe()
-    if (!this.me.account) this.$router.push('/')
+    if (!this.me) this.$router.push('/')
   },
 }
 </script>

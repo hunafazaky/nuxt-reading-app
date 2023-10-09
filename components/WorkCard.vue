@@ -19,53 +19,45 @@
     >
       <v-img
         height="100%"
-        :src="work.content.img_cover"
-        gradient="to top, rgba(12.9, 12.9, 12.9, .25), rgba(12.9, 12.9, 12.9, 1)"
+        :src="work.cover"
+        gradient="to top, rgba(12.9, 12.9, 12.9, 0), rgba(12.9, 12.9, 12.9, 1)"
       >
         <v-card-actions
           v-if="miniVariant === false"
           class="d-flex align-center pa-4"
         >
           <nuxt-link
-            :to="`/user/${work.activity.written_by.username}`"
+            :to="`/user/${work.writer.username}`"
             class="text-decoration-none white--text text-truncate"
           >
             <v-avatar class="mr-1" color="white" size="28">
-              <v-img :src="work.activity.written_by.img_profile"></v-img>
+              <v-img :src="work.writer.photo"></v-img>
             </v-avatar>
             <span
               class="font-weight-bold text-truncate"
-              v-text="work.activity.written_by.pen_name"
+              v-text="work.writer.pen_name"
             ></span>
           </nuxt-link>
-          <v-spacer></v-spacer>
-          <v-icon
-            :class="
-              work.keyword.type === 'Fiksi' ? 'purple--text' : 'error--text'
-            "
-          >
-            mdi-pound-box
-          </v-icon>
         </v-card-actions>
+        <!-- :class="miniVariant === true ? 'caption' : ''" -->
         <v-card-text
-          class="title text-capitalize"
-          :class="miniVariant === true ? 'caption' : ''"
+          class="title text-capitalize caption"
           v-text="
-            work.content.title.length > wordLimit.title
-              ? work.content.title.slice(0, wordLimit.title) + '...'
-              : work.content.title
+            work.title.length > wordLimit.title
+              ? work.title.slice(0, wordLimit.title) + '...'
+              : work.title
           "
         ></v-card-text>
-        <v-card-text
+        <!-- <v-card-text
           v-if="miniVariant === false"
           class="text-caption"
           v-html="
-            work.content.text.length > wordLimit.text
-              ? work.content.text.slice(0, wordLimit.text) + '...'
-              : work.content.text
+            work.text.length > wordLimit.text
+              ? work.text.slice(0, wordLimit.text) + '...'
+              : work.text
           "
         >
-        </v-card-text>
+        </v-card-text> -->
         <v-card-actions>
           <div class="absolute bottom" v-if="miniVariant === true">
             <v-btn icon class="mb-1" color="primary">
@@ -83,7 +75,7 @@
             <template
               v-if="
                 mutation === true &&
-                work.activity.written_by.username === me.account?.username
+                work.writer.username === me.username
               "
             >
               <v-btn
@@ -106,14 +98,25 @@
             </template>
           </div>
           <div class="mx-2 absolute bottom" v-else>
-            <v-btn small color="primary">
-              <v-icon left> mdi-text-box-check </v-icon>
-              simpan
-            </v-btn>
-            <v-btn small color="success" nuxt :to="`/work/${work.id}/read`">
-              <v-icon left> mdi-text-box-search </v-icon>
-              lanjut baca
-            </v-btn>
+            <v-row>
+              <v-col cols="12" class="ma-0 pa-0">
+                <v-card-text
+                  class="text-caption font-weight-bold"
+                >
+                #{{ work.category[0] }}
+                </v-card-text>
+              </v-col>
+              <v-col cols="12">
+                <v-btn x-small color="primary">
+                  <v-icon small left> mdi-text-box-check </v-icon>
+                  simpan
+                </v-btn>
+                <v-btn x-small color="success" nuxt :to="`/work/${work.id}/read`">
+                  <v-icon small left> mdi-text-box-search </v-icon>
+                  baca
+                </v-btn>
+              </v-col>
+            </v-row>
           </div>
         </v-card-actions>
       </v-img>

@@ -1,31 +1,24 @@
 <template>
-  <v-row :justify="works.length > 0 ? 'start' : 'center'">
-    <v-col cols="8">
-      <v-row class="mt-0">
-        <LoadingComponent v-if="loading" :loading="loading" />
-        <template v-if="!loading">
-          <template v-if="works.length > 0">
-            <v-col
-              v-for="work in works"
-              :key="work.id"
-              class="px-1 py-0"
-              cols="4"
-            >
-              <WorkCard
-                :work="work"
-                :wordLimit="{ title: 100, text: 0 }"
-                :miniVariant="false"
-                :mutation="false"
-              />
-            </v-col>
-          </template>
-          <template v-else>
-            <p class="overline text-center text-secondary ma-4">Kosong</p>
-          </template>
+  <v-row justify="center">
+    <v-col cols="10" sm="6" md="5">
+      <LoadingComponent v-if="loading.works" :loading="loading.works" />
+      <template v-if="!loading.works">
+        <template v-if="works.length > 0">
+          <WorkCard
+            v-for="work in works"
+            :key="work.id"
+            class="mx-auto"
+            :work="work"
+            :wordLimit="{ title: 150, text: 400 }"
+            :miniVariant="false"
+          />
         </template>
-      </v-row>
+        <template v-else>
+          <p class="overline text-center text-secondary ma-4">Kosong</p>
+        </template>
+      </template>
     </v-col>
-    <v-col cols="4">
+    <v-col cols="10" sm="6" md="5">
       <LoadingComponent v-if="loading.me" :loading="loading.me" />
       <template v-if="!loading.me">
         <v-card rounded="lg" fixed outlined>
@@ -43,11 +36,11 @@
               ></span>
             </nuxt-link>
           </v-card-text>
-          <v-card-title>Terakhir ditulis</v-card-title>
+          <v-card-title>Karya Ditulis</v-card-title>
           <v-card-text>
             <nuxt-link
               v-for="(work, i) in me.work_list"
-              v-if="i < 5"
+              v-if="i < 10"
               :key="work._id"
               :to="`/${work._id}/read`"
               class="text-decoration-none"
@@ -56,7 +49,7 @@
             </nuxt-link>
           </v-card-text>
           <v-divider />
-          <v-card-title>Terakhir dibaca</v-card-title>
+          <v-card-title>Karya Dibaca</v-card-title>
           <v-card-text>
             <nuxt-link
               v-for="(read, i) in me.read_list"
@@ -77,36 +70,32 @@
 
 <script>
 import WorkCard from '../components/WorkCard.vue'
-import Hashtags from '../components/Hashtags.vue'
 import LoadingComponent from '../components/LoadingComponent.vue'
 import { mapMutations } from 'vuex'
 
 export default {
-  name: 'Explore',
+  name: 'Home',
   data: () => ({
     me: {},
     works: {},
-    loading: true,
+    loading: {
+      me: true,
+      works: true,
+    },
   }),
   computed: {},
   methods: {
     getMe() {
       this.me = this.$store.state.users.me
       if (!this.me.id) this.$router.push('/')
-      // else this.loading.me = false
+      else this.loading.me = false
     },
     getWorks() {
       this.$axios.get(`/works`).then((works) => {
         this.works = works.data
-        this.loading = false
+        this.loading.works = false
       })
     },
-    // removeWork(work_id) {
-    //   this.$axios.delete(`/works/${work_id}`)
-    //     .then(() => {
-    //       this.getWorks()
-    //     })
-    // },
     addTodo(e) {
       console.log(e.target.value)
       console.log(this.todos)
@@ -119,7 +108,6 @@ export default {
   },
   components: {
     WorkCard,
-    Hashtags,
     LoadingComponent,
   },
   mounted() {
