@@ -51,17 +51,12 @@
                 </nuxt-link>
               </div>
               <div class="my-5">
-                <p class="caption font-weight-bold my-0">Tipe :</p>
-                <v-icon
-                  class="mx-0 purple--text"
-                  left
-                >
-                  mdi-pound-box
-                </v-icon>
+                <p class="caption font-weight-bold my-0">Kategori :</p>
                 <span
-                  class="overline text-truncate"
-                  v-text="work.category[0]"
-                ></span>
+                  class="overline font-weight-bold"
+                >
+                #{{ work.category[0] }}
+                </span>
               </div>
               <!-- <div class="my-5" v-if="work.keyword.hashtags.length > 0">
                 <p class="caption font-weight-bold my-0">Tagar :</p>

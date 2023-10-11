@@ -48,16 +48,6 @@
               : work.title
           "
         ></v-card-text>
-        <!-- <v-card-text
-          v-if="miniVariant === false"
-          class="text-caption"
-          v-html="
-            work.text.length > wordLimit.text
-              ? work.text.slice(0, wordLimit.text) + '...'
-              : work.text
-          "
-        >
-        </v-card-text> -->
         <v-card-actions>
           <div class="absolute bottom" v-if="miniVariant === true">
             <v-btn icon class="mb-1" color="primary">
@@ -101,7 +91,7 @@
             <v-row>
               <v-col cols="12" class="ma-0 pa-0">
                 <v-card-text
-                  class="text-caption font-weight-bold"
+                  class="overline font-weight-bold"
                 >
                 #{{ work.category[0] }}
                 </v-card-text>

@@ -1,10 +1,10 @@
 <template>
-  <v-row :justify="works.length > 0 ? 'start' : 'center'">
+  <v-row :justify="works?.length > 0 ? 'start' : 'center'">
     <v-col cols="8">
       <v-row class="mt-0">
         <LoadingComponent v-if="loading" :loading="loading" />
         <template v-if="!loading">
-          <template v-if="works.length > 0">
+          <template v-if="works?.length > 0">
             <v-col
               v-for="work in works"
               :key="work.id"
@@ -67,6 +67,9 @@
             >
             <p v-text="read.title" class="text-truncate ma-0 mb-1"></p>
             </nuxt-link>
+            <p>Counter: {{ counter }}</p>
+              <button @click="incrementCounter">Increment</button>
+              <button @click="decrementCounter">Decrement</button>
           </v-card-text>
           <v-divider />
         </v-card>
@@ -88,19 +91,38 @@ export default {
     works: {},
     loading: true,
   }),
-  computed: {},
+  computed: {
+    counter() {
+      return this.$store.getters.getCounter
+    },
+    // works() {
+    //   return this.$store.getters['works'];
+    // }
+  },
   methods: {
+    incrementCounter() {
+      this.$store.dispatch('increment')
+    },
+    decrementCounter() {
+      this.$store.dispatch('decrement')
+    },
+    fetchWorks() {
+      this.$store.dispatch('fetchWorksFromApi').then(() => {
+        this.works = this.$store.getters['works'];
+        this.loading = false;
+      });
+    },
     getMe() {
       this.me = this.$store.state.users.me
       if (!this.me.id) this.$router.push('/')
       // else this.loading.me = false
     },
-    getWorks() {
-      this.$axios.get(`/works`).then((works) => {
-        this.works = works.data
-        this.loading = false
-      })
-    },
+    // getWorks() {
+    //   this.$axios.get(`/works`).then((works) => {
+    //     this.works = works?.data
+    //     this.loading = false
+    //   })
+    // },
     // removeWork(work_id) {
     //   this.$axios.delete(`/works/${work_id}`)
     //     .then(() => {
@@ -124,7 +146,8 @@ export default {
   },
   mounted() {
     this.getMe()
-    this.getWorks()
+    // this.getWorks()
+    this.fetchWorks()
   },
 }
 </script>
