@@ -90,11 +90,9 @@
           <div class="mx-2 absolute bottom" v-else>
             <v-row>
               <v-col cols="12" class="ma-0 pa-0">
-                <v-card-text
-                  class="overline font-weight-bold"
-                >
-                #{{ work.category[0] }}
-                </v-card-text>
+                <v-btn x-small plain>
+                  #{{ work.category[0] }}
+                </v-btn>
               </v-col>
               <v-col cols="12">
                 <v-btn x-small color="primary">
@@ -104,6 +102,18 @@
                 <v-btn x-small color="success" nuxt :to="`/work/${work.id}/read`">
                   <v-icon small left> mdi-text-box-search </v-icon>
                   baca
+                </v-btn>
+                <v-btn
+                  v-if="work.writer.username === me.username"  
+                  x-small color="warning" nuxt :to="`/work/${work.id}/edit`">
+                  <v-icon small left> mdi-text-box-edit </v-icon>
+                  edit
+                </v-btn>
+                <v-btn
+                  v-if="work.writer.username === me.username"  
+                  x-small color="error">
+                  <v-icon small left> mdi-text-box-remove </v-icon>
+                  hapus
                 </v-btn>
               </v-col>
             </v-row>
@@ -133,15 +143,19 @@ export default {
     },
   },
   data: () => ({
-    me: {},
+    // me: {},
   }),
-  computed: {},
+  computed: {
+    me() {
+      return this.$store.getters['me'][0];
+    }
+  },
   methods: {
-    getMe() {
-      this.me = this.$store.state.users.me
-      if (!this.me.id) this.$router.push('/')
-      // else this.loading.me = false
-    },
+    // getMe() {
+    //   this.me = this.$store.state.users.me
+    //   // if (!this.me.id) this.$router.push('/')
+    //   // else this.loading.me = false
+    // },
     // removeWork(work_id) {
     // this.$store.commit('works/remove', work)
     // this.$axios.delete(`/works/${work_id}`)
@@ -149,7 +163,7 @@ export default {
     // },
   },
   mounted() {
-    this.getMe()
+    // this.getMe()
   },
 }
 </script>

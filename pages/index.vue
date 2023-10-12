@@ -11,14 +11,14 @@
           <v-card-text>
             <v-text-field
               dense
-              v-model="user.account.username"
+              v-model="user.username"
               label="Username"
               type="text"
               required
             ></v-text-field>
             <v-text-field
               dense
-              v-model="user.account.password"
+              v-model="user.password"
               label="Password"
               type="password"
               required
@@ -39,7 +39,12 @@
               color="primary"
               @click="login"
             >
-              login
+              <span v-if="loading" :loading="loading">
+                ...
+              </span>
+              <span v-else>
+                login
+              </span>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -77,21 +82,37 @@
 </style>
 
 <script>
+import LoadingComponent from '../components/LoadingComponent.vue'
+
 export default {
   layout: 'login',
   data: () => ({
     user: {
-      account: {
-        username: '',
-        password: '',
-      },
+        username: null,
+        password: null,
     },
+    // loginin: null,
     form_title: 'Registrasi',
-    errorMessage: false,
     message: '',
+    loading: false,
   }),
-
+  components: {
+    LoadingComponent,
+  },
   computed: {
+    errorMessage() {
+      if (this.$store.getters['me']) {
+        if(this.$store.getters['me']?.length > 0) {
+          this.loading = false;
+          this.$router.push('/home');
+          return false
+        } else {
+          this.loading = false;
+          this.message = 'Username atau Password salah';
+          return true
+        }
+      } else return false
+    },
     height() {
       switch (this.$vuetify.breakpoint.name) {
         case 'xs':
@@ -116,31 +137,24 @@ export default {
       this.form_title = 'Registrasi'
     },
     login() {
-      this.$axios
-        .get(`/users?username=${this.user.account.username}`)
-        .then((user) => {
-          this.$store.commit('users/login', user.data[0])
-          this.$router.push('/home')
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      this.loading = true;
+      this.$store.dispatch('auth', this.user);
     },
     regis() {
-      this.$axios
-        .post(`/users`, this.user)
-        .then((user) => {
-          if (user.data.message) {
-            this.errorMessage = true
-            this.message = user.data.message
-          } else {
-            this.$store.commit('users/login', user.data[0])
-            this.$router.push('/home')
-          }
-        })
-        .catch((err) => {
-          console.log(err)
-        })
+      // this.$axios
+      //   .post(`/users`, this.user)
+      //   .then((user) => {
+      //     if (user.data.message) {
+      //       this.errorMessage = true
+      //       this.message = user.data.message
+      //     } else {
+      //       this.$store.commit('users/login', user.data[0])
+      //       this.$router.push('/home')
+      //     }
+      //   })
+      //   .catch((err) => {
+      //     console.log(err)
+      //   })
     },
   },
 }

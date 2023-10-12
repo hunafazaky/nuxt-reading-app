@@ -2,6 +2,8 @@ export const state = () => ({
   counter: 0,
   worksData: null,
   usersData: null,
+  workData: null,
+  myData: null,
 })
 
 export const mutations = {
@@ -16,6 +18,12 @@ export const mutations = {
   },
   setUsers(state, data) {
     state.usersData = data
+  },
+  setWork(state, data) {
+    state.workData = data
+  },
+  setMe(state, data) {
+    state.myData = data
   },
 }
 
@@ -32,7 +40,7 @@ export const actions = {
   decrement(context) {
     context.commit('decrement')
   },
-  fetchWorksFromApi({ commit }) {
+  fetchWorks({ commit }) {
     // Lakukan panggilan API di sini, misalnya dengan axios
     this.$axios.get('/works')
       .then(response => {
@@ -42,11 +50,41 @@ export const actions = {
         console.error('Error fetching data from API:', error)
       })
   },
-  fetchUsersFromApi({ commit }) {
+  fetchUsers({ commit }) {
     // Lakukan panggilan API di sini, misalnya dengan axios
     this.$axios.get('/users')
       .then(response => {
         commit('setUsers', response.data)
+      })
+      .catch(error => {
+        console.error('Error fetching data from API:', error)
+      })
+  },
+  fetchWorkById({ commit }, id) {
+    // Lakukan panggilan API di sini, misalnya dengan axios
+    this.$axios.get('/works/' + id)
+      .then(response => {
+        commit('setWork', response.data)
+      })
+      .catch(error => {
+        console.error('Error fetching data from API:', error)
+      })
+  },
+  fetchUserById({ commit }, id) {
+    // Lakukan panggilan API di sini, misalnya dengan axios
+    this.$axios.get('/users/' + id)
+      .then(response => {
+        commit('setUser', response.data)
+      })
+      .catch(error => {
+        console.error('Error fetching data from API:', error)
+      })
+  },
+  auth({ commit }, params) {
+    // Lakukan panggilan API di sini, misalnya dengan axios
+    this.$axios.get(`/users?username=${params.username}&password=${params.password}`)
+      .then(response => {
+        commit('setMe', response.data)
       })
       .catch(error => {
         console.error('Error fetching data from API:', error)
@@ -63,5 +101,11 @@ export const getters = {
   },
   users(state) {
     return state.usersData
+  },
+  work(state) {
+    return state.workData
+  },
+  me(state) {
+    return state.myData
   }
 }

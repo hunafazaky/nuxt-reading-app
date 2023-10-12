@@ -26,8 +26,8 @@
       </v-row>
     </v-col>
     <v-col cols="4">
-      <LoadingComponent v-if="loading.me" :loading="loading.me" />
-      <template v-if="!loading.me">
+      <!-- <LoadingComponent v-if="loading.me" :loading="loading.me" /> -->
+      <template>
         <v-card rounded="lg" fixed outlined>
           <v-card-text>
             <nuxt-link
@@ -87,17 +87,25 @@ import { mapMutations } from 'vuex'
 export default {
   name: 'Explore',
   data: () => ({
-    me: {},
-    works: {},
+    // me: {},
+    // works: {},
     loading: true,
   }),
   computed: {
     counter() {
       return this.$store.getters.getCounter
     },
-    // works() {
-    //   return this.$store.getters['works'];
-    // }
+    me() {
+      if (this.$store.getters['me']) {
+        return this.$store.getters['me'][0];
+      } else {
+        this.$router.push('/');
+        return []; 
+      }
+    },
+    works() {
+      return this.$store.getters['works'];
+    }
   },
   methods: {
     incrementCounter() {
@@ -107,28 +115,11 @@ export default {
       this.$store.dispatch('decrement')
     },
     fetchWorks() {
-      this.$store.dispatch('fetchWorksFromApi').then(() => {
-        this.works = this.$store.getters['works'];
+      this.$store.dispatch('fetchWorks').then(() => {
+        // this.works = this.$store.getters['works'];
         this.loading = false;
       });
     },
-    getMe() {
-      this.me = this.$store.state.users.me
-      if (!this.me.id) this.$router.push('/')
-      // else this.loading.me = false
-    },
-    // getWorks() {
-    //   this.$axios.get(`/works`).then((works) => {
-    //     this.works = works?.data
-    //     this.loading = false
-    //   })
-    // },
-    // removeWork(work_id) {
-    //   this.$axios.delete(`/works/${work_id}`)
-    //     .then(() => {
-    //       this.getWorks()
-    //     })
-    // },
     addTodo(e) {
       console.log(e.target.value)
       console.log(this.todos)
@@ -145,7 +136,7 @@ export default {
     LoadingComponent,
   },
   mounted() {
-    this.getMe()
+    // this.getMe()
     // this.getWorks()
     this.fetchWorks()
   },
