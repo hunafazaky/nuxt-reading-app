@@ -2,90 +2,90 @@ export const state = () => ({
   data: [
     {
       id: 0,
-      name: 'Teknologi',
+      name: 'Teknologi'
     },
     {
       id: 1,
-      name: 'Kesehatan',
+      name: 'Kesehatan'
     },
     {
       id: 2,
-      name: 'Olahraga',
+      name: 'Olahraga'
     },
     {
       id: 3,
-      name: 'Travel',
+      name: 'Travel'
     },
     {
       id: 4,
-      name: 'Otomotif',
+      name: 'Otomotif'
     },
     {
       id: 5,
-      name: 'Sains',
+      name: 'Sains'
     },
     {
       id: 6,
-      name: 'Sejarah',
+      name: 'Sejarah'
     },
     {
       id: 7,
-      name: 'Ekonomi',
+      name: 'Ekonomi'
     },
     {
       id: 8,
-      name: 'Sosial',
+      name: 'Sosial'
     },
     {
       id: 9,
-      name: 'Budaya',
+      name: 'Budaya'
     },
     {
       id: 10,
-      name: 'Agama',
+      name: 'Agama'
     },
     {
       id: 11,
-      name: 'Politik',
+      name: 'Politik'
     },
     {
       id: 12,
-      name: 'Aksi',
+      name: 'Aksi'
     },
     {
       id: 13,
-      name: 'Romansa',
+      name: 'Romansa'
     },
     {
       id: 14,
-      name: 'Fiksi Ilmiah',
+      name: 'Fiksi Ilmiah'
     },
     {
       id: 15,
-      name: 'Fantasi',
+      name: 'Fantasi'
     },
     {
       id: 16,
-      name: 'Horor',
+      name: 'Horor'
     },
     {
       id: 17,
-      name: 'Drama',
-    },
-  ],
+      name: 'Drama'
+    }
+  ]
 })
 
 export const mutations = {
-  add(state, text) {
+  add (state, text) {
     state.list.push({
       text,
-      done: false,
+      done: false
     })
   },
-  remove(state, { todo }) {
+  remove (state, { todo }) {
     state.list.splice(state.list.indexOf(todo), 1)
   },
-  toggle(state, todo) {
+  toggle (state, todo) {
     todo.done = !todo.done
-  },
+  }
 }
