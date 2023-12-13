@@ -3,6 +3,34 @@
     <LoadingPage :loading="loading.page"/>
     <v-row :justify="works?.length > 0 ? 'start' : 'center'">
       <v-col cols="8">
+        <p class="overline text-center text-secondary ma-4">Rekomendasi</p>
+        <v-row class="mt-0">
+          <LoadingComponent v-if="loading.work" :loading="loading.work" />
+          <template v-if="!loading.work">
+            <template v-if="foryou?.length > 0">
+              <v-col
+                v-for="(work, i) in foryou"
+                v-if="i < 6"
+                :key="work.id"
+                class="px-1 py-0"
+                cols="4"
+              >
+                <WorkCard
+                  :work="work"
+                  :wordLimit="{ title: 100, text: 0 }"
+                  :miniVariant="false"
+                  :mutation="false"
+                  @remove-work="deleteWork"
+                />
+              </v-col>
+            </template>
+            <template v-else>
+              <p class="overline text-center text-secondary ma-4">Memuat...</p>
+            </template>
+          </template>
+        </v-row>
+        <!-- {{ foryou }} -->
+        <p class="overline text-center text-secondary ma-4">Paling Baru</p>
         <v-row class="mt-0">
           <LoadingComponent v-if="loading.work" :loading="loading.work" />
           <template v-if="!loading.work">
@@ -104,6 +132,7 @@ export default {
   name: 'Home',
   data: () => ({
     loading: {
+      // foryou: true,
       work: true,
       user: true,
       page: false
@@ -127,6 +156,12 @@ export default {
         this.loading.work = false
         return this.$store.getters['works']
       }
+    },
+    foryou() {
+      if (this.$store.getters['foryou']) {
+        this.loading.work = false
+        return this.$store.getters['foryou']
+      }
     }
   },
   methods: {
@@ -139,6 +174,10 @@ export default {
     getWorks() {
       this.loading.work = true
       this.$store.dispatch('getWorks')
+    },
+    getForYou() {
+      this.loading.work = true
+      this.$store.dispatch('getForYou')
     },
     getUserById() {
       this.$store.dispatch('getUserById', this.me.id)
@@ -174,6 +213,7 @@ export default {
   },
   mounted() {
     this.getWorks()
+    this.getForYou()
     this.getUserById()
   },
 }

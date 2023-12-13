@@ -1,4 +1,5 @@
 export const state = () => ({
+  forYouData: null,
   worksData: null,
   usersData: null,
   workData: null,
@@ -9,6 +10,9 @@ export const state = () => ({
 })
 
 export const mutations = {
+  setForYou (state, data) {
+    state.forYouData = data
+  },
   setWorks (state, data) {
     state.worksData = data
   },
@@ -62,6 +66,15 @@ export const mutations = {
 }
 
 export const actions = {
+  getForYou ({ state, commit }) {
+    this.$axios.get('/user_recommenders/' + state.userData.id)
+      .then(response => {
+        commit('setForYou', response.data)
+      })
+      .catch(error => {
+        console.error('Error fetching data from API:', error)
+      })
+  },
   getWorks ({ commit }) {
     this.$axios.get('/works?sortBy=newest')
       .then(response => {
@@ -222,6 +235,20 @@ export const actions = {
         })
     })
   },
+  updateRecommender ({ state, commit }, rating) {
+    return new Promise((resolve, reject) => {
+      // commit('updateRecommender', rating)
+      this.$axios.put(`/user_recommenders`,  { work_id: state.workData.id, user_id: state.userData.id, rating })
+        .then(response => {
+          // commit('setUser', response.data)
+          resolve(response.data)
+        })
+        .catch(error => {
+          console.error(error)
+          reject(error)
+        })
+    })
+  },
   regis ({ commit }, data) {
     return new Promise((resolve, reject) => {
       this.$axios.post('/users', { username: data.username, pen_name: data.username, password: data.password })
@@ -279,6 +306,9 @@ export const actions = {
 export const getters = {
   works (state) {
     return state.worksData
+  },
+  foryou (state) {
+    return state.forYouData
   },
   work (state) {
     return state.workData

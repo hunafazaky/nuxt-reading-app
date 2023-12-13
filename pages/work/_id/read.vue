@@ -152,10 +152,13 @@ export default {
         this.$store.dispatch('updateReaders', data)
       })
     },
-    sendRating() {
+    async sendRating() {
       // console.log(this.rating);
       this.$store.dispatch('updateRateList', this.rating);
       this.$store.dispatch('updateRateBy', this.rating);
+      this.$store.dispatch('updateRecommender', this.rating).then((data) => {
+        console.log(data);
+      })
       // this.$store.dispatch('getWorkById', this.$route.params.id)
       // .then((data) => {
       //   this.$store.dispatch('updateRateList', data.id, this.rating)
