@@ -84,7 +84,7 @@
                 dense
                 clearable
                 prepend-icon=""
-                append-outer-icon="mdi-image-plus"
+                append-outer-icon="mdi-file-image-plus"
                 show-size
                 truncate-length="25"
                 label="Cover"
@@ -93,6 +93,60 @@
                 v-model="file"
                 @change="fileToImage"
               ></v-file-input>
+              <v-btn-toggle
+                v-model="attachment_type"
+                class="mb-2"
+              >
+                <v-btn>
+                  <v-icon>mdi-link-box</v-icon>
+                </v-btn>
+                <v-btn>
+                  <v-icon>mdi-file-pdf-box</v-icon>
+                </v-btn>
+              </v-btn-toggle>
+              <v-row
+                v-if="attachment_type === 0"
+              >
+                <v-col
+                  cols="12"
+                  sm="5"
+                >
+                  <v-text-field
+                    outlined
+                    dense
+                    label="Judul"
+                    v-model="work.attachment.title"
+                  ></v-text-field>
+                </v-col>
+                <v-col
+                  cols="12"
+                  sm="7"
+                >                  
+                  <v-text-field
+                    outlined
+                    dense
+                    label="Link"
+                    hint="Lampirkan tautan (Optional)"
+                    persistent-hint
+                    v-model="work.attachment.link"
+                  ></v-text-field>
+                </v-col>
+              </v-row>
+              <v-file-input
+                v-if="attachment_type === 1"
+                outlined
+                dense
+                clearable
+                prepend-icon=""
+                append-outer-icon="mdi-file-document-plus"
+                show-size
+                truncate-length="25"
+                label="File PDF"
+                hint="Lampirkan file PDF (Optional)"
+                persistent-hint
+                v-model="attachmentFile"
+                ></v-file-input>
+                <!-- @change="fileToLink" -->
             </v-col>
           </v-row>
           <v-row>
@@ -136,14 +190,17 @@ export default {
     // me: {},
     loading: true,
     file: null,
+    attachmentFile: null,
     success: false,
     work: {
-      cover: null,
       title: null,
+      cover: null,
+      attachment: {},
       writer: null,
       category: [],
       text: null,
     },
+    attachment_type: null,
   }),
   computed: {
     height() {
@@ -194,8 +251,7 @@ export default {
     //     }
     //   }
     // },
-    async postWork() {
-      const file = this.file;
+    async uploadFileToStorage(file) {
       const storageRef = this.$fireModule.storage().ref();
       const fileRef = storageRef.child(file.name);
 
@@ -204,39 +260,96 @@ export default {
         await fileRef.put(file);
 
         // Get download URL
-        const downloadURL = await fileRef.getDownloadURL();
-        this.work.cover = downloadURL;
-        this.work.writer = this.me.id;
-        if (this.work.cover === null) this.work.cover = '/temp-profile.webp';
-        this.$store.dispatch('postWork', this.work).then((data) => {
-          // this.works = this.$store.getters['works'];
-          // this.loading = false;
-          this.success = true
-          setTimeout(() => {
-            this.$router.push('/home')
-          }, 2000)
-        });
-        console.log('File uploaded. Download URL:', downloadURL);
+        return fileRef.getDownloadURL();
       } catch (error) {
         console.error('Error uploading file:', error);
+        throw error;
       }
-      // this.$axios
-      //   .post(`/works`, this.work)
-      //   // .then((data) => {
-      //   //   this.me.activity.writings.push({
-      //   //     id: data.id,
-      //   //     createdAt: data.createdAt,
-      //   //     updatedAt: data.updatedAt
-      //   //   })
-      //   //   this.$axios.put(`/users/${this.me.id}`, this.me);
-      //   // })
-      //   .then(() => {
-      //     this.success = true
-      //     setTimeout(() => {
-      //       this.$router.push('/home')
-      //     }, 2000)
-      //   })
     },
+    async postWork() {
+      try {
+        // Upload main file
+        this.work.cover = await this.uploadFileToStorage(this.file);
+        this.work.writer = this.me.id;
+
+        // Set default cover if necessary
+        if (this.work.cover === null) {
+          this.work.cover = '/temp-profile.webp';
+        }
+
+        // Upload attachment file if attachment type is 1
+        if (this.attachment_type === 1) {
+          const attachmentLink = await this.uploadFileToStorage(this.attachmentFile);
+          this.work.attachment = { title: this.attachmentFile.name, link: attachmentLink };
+        }
+
+        // Dispatch postWork action
+        const data = await this.$store.dispatch('postWork', this.work);
+
+        // Handle success
+        this.success = true;
+        setTimeout(() => {
+          this.$router.push('/home');
+        }, 1000);
+        // console.log('File uploaded. Download URL:', this.work.cover);
+      } catch (error) {
+        console.error('Error uploading work:', error);
+      }
+    },
+
+// Usage
+// this.uploadWork();
+    // async postWork() {
+    //   const file = this.file;
+    //   const storageRef = this.$fireModule.storage().ref();
+    //   const fileRef = storageRef.child(file.name);
+    //   const fileRef2 = storageRef.child(this.attachmentFile.name);
+
+    //   try {
+    //     // Upload file to Firebase Storage
+    //     await fileRef.put(file);
+
+    //     // Get download URL
+    //     const downloadURL = await fileRef.getDownloadURL();
+    //     this.work.cover = downloadURL;
+    //     this.work.writer = this.me.id;
+    //     if (this.work.cover === null) this.work.cover = '/temp-profile.webp';
+    //     if (this.attachment_type === 1) {
+    //       await fileRef2.put(this.attachmentFile);
+    //       const link = await fileRef2.getDownloadURL();
+    //       this.work.attachment = {
+    //         title: this.attachmentFile.name, link
+    //       }
+    //     }
+    //     this.$store.dispatch('postWork', this.work).then((data) => {
+    //       // this.works = this.$store.getters['works'];
+    //       // this.loading = false;
+    //       this.success = true
+    //       setTimeout(() => {
+    //         this.$router.push('/home')
+    //       }, 2000)
+    //     });
+    //     console.log('File uploaded. Download URL:', downloadURL);
+    //   } catch (error) {
+    //     console.error('Error uploading file:', error);
+    //   }
+    //   // this.$axios
+    //   //   .post(`/works`, this.work)
+    //   //   // .then((data) => {
+    //   //   //   this.me.activity.writings.push({
+    //   //   //     id: data.id,
+    //   //   //     createdAt: data.createdAt,
+    //   //   //     updatedAt: data.updatedAt
+    //   //   //   })
+    //   //   //   this.$axios.put(`/users/${this.me.id}`, this.me);
+    //   //   // })
+    //   //   .then(() => {
+    //   //     this.success = true
+    //   //     setTimeout(() => {
+    //   //       this.$router.push('/home')
+    //   //     }, 2000)
+    //   //   })
+    // },
     async fileToImage() {
       if (this.file) {
         this.work.cover = URL.createObjectURL(this.file)

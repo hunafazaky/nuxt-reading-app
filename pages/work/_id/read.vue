@@ -14,6 +14,7 @@
           v-text="work?.title"
         ></h1>
         <p class="subtitle-1 my-5" v-html="work?.text"></p>
+        <!-- <a class="subtitle-1 my-5 text-decoration-none" :href="work?.attachment.link" target="_blank" v-html="work?.attachment.title"></a> -->
       </v-col>
       <v-col class="my-5" cols="12" md="4">
         <v-card rounded="lg" outlined>
@@ -60,6 +61,27 @@
                   >
                   #{{ category }}
                   </span>
+                </div>
+                <div class="my-5">
+                  <p class="caption font-weight-bold my-0">Lampiran :</p>
+                  <v-btn
+                    color="error"
+                    class="my-2 white--text truncate"
+                    block
+                    :max-width="150"
+                    @click="openLink(work?.attachment.link)"
+                  >
+                    <v-icon
+                      left
+                      dark
+                    >
+                      mdi-file-pdf-box
+                    </v-icon>
+                    <span class="text-truncate" style="max-width:150px">
+                      
+                      {{ work?.attachment.title }}
+                    </span>
+                  </v-btn>
                 </div>
                 <div class="my-5">
                   <p class="caption font-weight-bold my-0">Berikan Penilaian Anda</p>
@@ -172,6 +194,9 @@ export default {
     writer(id) {
       return this.$store.state.users.data.find((user) => user.id == id)
     },
+    openLink(link) {
+      window.open(link, "_blank");
+    }
   },
   components: { PopZoom, LoadingPage },
   mounted() {
