@@ -6,6 +6,7 @@ export const state = () => ({
   userData: null,
   workReaders: null,
   workLikeBy: null,
+  newReadList: null,
   workRateBy: null
 })
 
@@ -33,7 +34,7 @@ export const mutations = {
   updateReadList (state, data) {
     const newData = state.userData.read_list.filter(item => item._id !== data)
     newData.unshift(data)
-    state.userData.read_list = newData
+    state.newReadList = newData
   },
   updateLikeBy (state, data) {
     const newData = data.like_by.filter(item => item._id !== state.userData.id)
@@ -143,7 +144,7 @@ export const actions = {
   updateReadList ({ state, commit }, workId) {
     return new Promise((resolve, reject) => {
       commit('updateReadList', workId)
-      this.$axios.put(`/users/${state.userData.id}`, state.userData)
+      this.$axios.put(`/users/${state.userData.id}`, { read_list: state.newReadList })
         .then(response => {
           commit('setUser', response.data)
           resolve(response.data)

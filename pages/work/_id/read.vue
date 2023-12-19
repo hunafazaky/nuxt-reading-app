@@ -156,24 +156,28 @@ export default {
   methods: {
     getMe() {
       this.me = this.$store.getters['me']
-      // this.getRating();
     },
     getRating() {
       const rate_list = this.$store.getters['me'].rate_list.find(item => item.work_id === this.$route.params.id)
       this.rating = rate_list?.rating
-      // if (this.$store.getters['me']?.rate_list) {
-      //   // console.log(this.rating);
-      // }
-      // else {
-      //   this.rating = null
-      // }
     },  
-    getWorkById() {
-      this.$store.dispatch('getWorkById', this.$route.params.id)
-      .then((data) => {
-        this.$store.dispatch('updateReadList', data.id)
-        this.$store.dispatch('updateReaders', data)
-      })
+    async getWorkById() {
+      try {
+        // Fetch work by ID
+        const work = await this.$store.dispatch('getWorkById', this.$route.params.id);
+
+        // Update read list and readers
+        this.$store.dispatch('updateReadList', work.id);
+        this.$store.dispatch('updateReaders', work);
+      } catch (error) {
+        console.error('Error fetching or updating work:', error);
+        // Handle error if necessary
+      }
+      // this.$store.dispatch('getWorkById', this.$route.params.id)
+      // .then((data) => {
+      //   this.$store.dispatch('updateReadList', data.id)
+      //   this.$store.dispatch('updateReaders', data)
+      // })
     },
     async sendRating() {
       // console.log(this.rating);
@@ -182,11 +186,6 @@ export default {
       this.$store.dispatch('updateRecommender', this.rating).then((data) => {
         console.log(data);
       })
-      // this.$store.dispatch('getWorkById', this.$route.params.id)
-      // .then((data) => {
-      //   this.$store.dispatch('updateRateList', data.id, this.rating)
-      //   this.$store.dispatch('updateRateBy', data, this.rating)
-      // })
     },
     hashtag(id) {
       return this.$store.state.hashtags.data.find((hashtag) => hashtag.id == id)

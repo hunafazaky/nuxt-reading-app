@@ -176,10 +176,6 @@ export default {
     removeWork(id) {
       this.$emit('remove-work', id)
     },
-    // readWork(work) {
-    //   this.$store.dispatch('updateReadList', work.id)
-    //   this.$store.dispatch('updateReaders', work)
-    // },
     likeCheck() {
       const result = this.work.like_by.filter((item => item._id === this.me.id))
       // console.log(result);
@@ -187,16 +183,24 @@ export default {
         this.liked = true
       } else this.liked = false
     },
-    likeWork(work) {
-      this.loading = true;
-      this.$store.dispatch('updateLikeList', work.id)
-      .then((data) => {
-        this.$store.dispatch('updateLikeBy', work)
-        .then((data) => {
-          this.loading = false
-          this.liked = true
-        })
-      })
+    async likeWork(work) {
+      try {
+        // Set loading to true
+        this.loading = true;
+
+        // Update like list
+        await this.$store.dispatch('updateLikeList', work.id);
+
+        // Update like by
+        await this.$store.dispatch('updateLikeBy', work);
+
+        // Set loading to false and liked to true
+        this.loading = false;
+        this.liked = true;
+      } catch (error) {
+        console.error('Error updating like:', error);
+        // Handle error if necessary
+      }
     },
     dislikeWork(work) {
       this.loading = true;
@@ -212,9 +216,6 @@ export default {
   },
   mounted() {
     this.likeCheck();
-    // if (!this.work.id) {
-    //   this.work.id = this.work._id;
-    // }
   },
 }
 </script>
