@@ -68,7 +68,7 @@ export default {
       if (this.$store.getters['works']) {
         this.loading = false
         if (this.category) {
-          const filtered = this.$store.getters['works'].filter((item) => item.category[0] === this.category)
+          const filtered = this.$store.getters['works'].filter((item) => item.category.includes(this.category))
           return filtered
         }
         return this.$store.getters['works']
