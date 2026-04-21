@@ -16,6 +16,13 @@
   --color-info: rgb(var(--v-theme-info));
   --color-warning: rgb(var(--v-theme-warning));
   --color-error: rgb(var(--v-theme-error));
+  --color-hz-light: #f2f2f2;
+  --color-hz-dark: #0b192c;
+  --color-hz-crimson: #dc143c;
+  --color-hz-dawn: #ff6500;
+  --color-hz-rise: #ffc55a;
+  --color-hz-forest: #41a67e;
+  --color-hz-sea: #1055c9;
 
   --breakpoint-*: initial;
   --breakpoint-xs: 0px;
