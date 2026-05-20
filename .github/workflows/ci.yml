@@ -20,16 +20,16 @@ jobs:
         node: [14]
 
     steps:
-      - name: Checkout 🛎
+      - name: Checkout
         uses: actions/checkout@master
 
-      - name: Setup node env 🏗
+      - name: Setup node env
         uses: actions/setup-node@v2.1.5
         with:
           node-version: ${{ matrix.node }}
           check-latest: true
 
-      - name: Cache node_modules 📦
+      - name: Cache node_modules
         uses: actions/cache@v2.1.4
         with:
           path: ~/.npm
@@ -37,7 +37,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-node-
 
-      - name: Install dependencies 👨🏻‍💻
+      - name: Install dependencies
         run: |
           if [ -e yarn.lock ]; then
           yarn install --frozen-lockfile
@@ -47,5 +47,5 @@ jobs:
           npm i
           fi
 
-      - name: Run linter 👀
+      - name: Run linter
         run: npm run lint
