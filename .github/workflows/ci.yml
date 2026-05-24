@@ -4,15 +4,15 @@ on:
   push:
     branches:
       - main
-      - master
   pull_request:
     branches:
       - main
-      - master
 
 jobs:
   ci:
     runs-on: ubuntu-latest
+    env: # Berlaku untuk semua step di job ini
+      NODE_OPTIONS: --openssl-legacy-provider
 
     strategy:
       matrix:
@@ -38,7 +38,7 @@ jobs:
       # (The 'corepack enable' step is no longer needed and can be deleted)
 
       - name: Install dependencies
-        run: pnpm install --frozen-lockfile cross-env NODE_OPTIONS=--openssl-legacy-provider # Add NODE_OPTIONS to address OpenSSL issues in Node 24
+        run: pnpm install --frozen-lockfile
 
       - name: Run linter
         run: pnpm lint
