@@ -101,59 +101,59 @@
 
 <script>
 export default {
-  name: 'DefaultLayout',
+  name: "DefaultLayout",
   data() {
     return {
-      search: '',
+      search: "",
       items: [
         {
-          icon: 'mdi-home',
-          title: 'Beranda',
-          to: '/home',
+          icon: "mdi-home",
+          title: "Beranda",
+          to: "/home",
         },
         {
-          icon: 'mdi-compass',
-          title: 'Eksplorasi',
-          to: '/explore',
+          icon: "mdi-compass",
+          title: "Eksplorasi",
+          to: "/explore",
         },
         {
-          icon: 'mdi-bookshelf',
-          title: 'Rak Buku',
-          to: '/bookshelf',
+          icon: "mdi-bookshelf",
+          title: "Rak Buku",
+          to: "/bookshelf",
         },
         {
-          icon: 'mdi-text-box-plus',
-          title: 'Tulis Sesuatu',
-          to: '/write',
+          icon: "mdi-text-box-plus",
+          title: "Tulis Sesuatu",
+          to: "/write",
         },
       ],
       miniVariant: false,
       right: true,
       rightDrawer: false,
-      title: 'Reading App',
-    }
+      title: "Reading App",
+    };
   },
   computed: {
     height() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-          return 220
-        case 'sm':
-          return 400
-        case 'md':
-          return 500
-        case 'lg':
-          return 600
-        case 'xl':
-          return 800
+        case "xs":
+          return 220;
+        case "sm":
+          return 400;
+        case "md":
+          return 500;
+        case "lg":
+          return 600;
+        case "xl":
+          return 800;
       }
     },
     me() {
-      if (this.$store.getters['me']) {
-        return this.$store.getters['me']
+      if (this.$store.getters["me"]) {
+        return this.$store.getters["me"];
       } else {
-        this.$router.push('/');
-        return []; 
+        this.$router.push("/");
+        return [];
       }
     },
   },
@@ -165,7 +165,7 @@ export default {
   mounted() {
     // this.getMe()
   },
-}
+};
 </script>
 
 <style lang="css">

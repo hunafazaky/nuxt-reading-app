@@ -13,12 +13,12 @@
 
 <script>
 export default {
-  name: 'PopZoom',
-  props: ['maxWidth', 'image', 'showPopZoom'],
+  name: "PopZoom",
+  props: ["maxWidth", "image", "showPopZoom"],
   data() {
     return {
       dialog: false,
-    }
+    };
   },
-}
+};
 </script>

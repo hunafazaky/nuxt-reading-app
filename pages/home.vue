@@ -1,9 +1,14 @@
 <template>
   <div>
-    <LoadingPage :loading="loading.page"/>
+    <LoadingPage :loading="loading.page" />
     <v-row :justify="works?.length > 0 ? 'start' : 'center'">
       <v-col cols="8">
-        <p class="overline text-center text-secondary ma-4" v-if="foryou?.length > 0">Rekomendasi</p>
+        <p
+          class="overline text-center text-secondary ma-4"
+          v-if="foryou?.length > 0"
+        >
+          Rekomendasi
+        </p>
         <v-row class="mt-0" v-if="foryou?.length > 0">
           <LoadingComponent v-if="loading.work" :loading="loading.work" />
           <template v-if="!loading.work">
@@ -27,7 +32,12 @@
           </template>
         </v-row>
         <!-- {{ foryou }} -->
-        <p class="overline text-center text-secondary ma-4" v-if="foryou?.length > 0">Paling Baru</p>
+        <p
+          class="overline text-center text-secondary ma-4"
+          v-if="foryou?.length > 0"
+        >
+          Paling Baru
+        </p>
         <v-row class="mt-0">
           <LoadingComponent v-if="loading.work" :loading="loading.work" />
           <template v-if="!loading.work">
@@ -46,10 +56,7 @@
                   @remove-work="deleteWork"
                 />
               </v-col>
-              <v-col
-                class="px-1 py-0"
-                cols="4"
-              >
+              <v-col class="px-1 py-0" cols="4">
                 <!-- <button @click="loadMore" :disabled="loading.work || works.length >= total">
                   {{ loading.work ? 'Loading...' : (works.length >= total ? 'No more works' : 'Load More') }}
                 </button> -->
@@ -84,7 +91,9 @@
                 </nuxt-link>
               </v-card-text>
               <v-divider />
-              <v-card-title class="overline py-2 font-weight-bold">Terakhir ditulis</v-card-title>
+              <v-card-title class="overline py-2 font-weight-bold"
+                >Terakhir ditulis</v-card-title
+              >
               <v-card-text>
                 <template v-if="me.work_list.length > 0">
                   <nuxt-link
@@ -94,7 +103,7 @@
                     :to="`/work/${work._id}/read`"
                     class="text-decoration-none text--secondary"
                   >
-                  <p v-text="work.title"></p>
+                    <p v-text="work.title"></p>
                   </nuxt-link>
                 </template>
                 <template v-if="me.work_list.length === 0">
@@ -102,7 +111,9 @@
                 </template>
               </v-card-text>
               <v-divider />
-              <v-card-title class="overline py-2 font-weight-bold">Terakhir dibaca</v-card-title>
+              <v-card-title class="overline py-2 font-weight-bold"
+                >Terakhir dibaca</v-card-title
+              >
               <v-card-text>
                 <template v-if="me.read_list.length > 0">
                   <nuxt-link
@@ -111,9 +122,9 @@
                     :key="read._id"
                     :to="`/work/${read._id}/read`"
                     class="text-decoration-none text--secondary"
-                    >
+                  >
                     <!-- @click="readWork(read)" -->
-                  <p v-text="read.title"></p>
+                    <p v-text="read.title"></p>
                   </nuxt-link>
                 </template>
                 <template v-if="me.read_list.length === 0">
@@ -130,22 +141,22 @@
 </template>
 
 <script>
-import WorkCard from '../components/WorkCard.vue'
-import Hashtags from '../components/Hashtags.vue'
-import LoadingComponent from '../components/LoadingComponent.vue'
-import LoadingPage from '../components/LoadingPage.vue'
-import { mapMutations } from 'vuex'
+import WorkCard from "../components/WorkCard.vue";
+import Hashtags from "../components/Hashtags.vue";
+import LoadingComponent from "../components/LoadingComponent.vue";
+import LoadingPage from "../components/LoadingPage.vue";
+import { mapMutations } from "vuex";
 
 export default {
-  name: 'Home',
+  name: "Home",
   data: () => ({
     loading: {
       // foryou: true,
       work: true,
       user: true,
-      page: false
+      page: false,
     },
-    works: [],         // Simpan semua artikel gabungan di sini
+    works: [], // Simpan semua artikel gabungan di sini
     page: 1,
     limit: 12,
     total: 0,
@@ -155,12 +166,12 @@ export default {
     //   return this.$store.getters.getCounter
     // },
     me() {
-      if (this.$store.getters['me']) {
-        this.loading.user = false
-        return this.$store.getters['me']
+      if (this.$store.getters["me"]) {
+        this.loading.user = false;
+        return this.$store.getters["me"];
       } else {
-        this.$router.push('/');
-        return []; 
+        this.$router.push("/");
+        return [];
       }
     },
     // works() {
@@ -170,11 +181,11 @@ export default {
     //   }
     // },
     foryou() {
-      if (this.$store.getters['foryou']) {
-        this.loading.work = false
-        return this.$store.getters['foryou']
+      if (this.$store.getters["foryou"]) {
+        this.loading.work = false;
+        return this.$store.getters["foryou"];
       }
-    }
+    },
   },
   methods: {
     // async fetchWorks() {
@@ -207,23 +218,22 @@ export default {
     //   this.$store.dispatch('decrement')
     // },
     getWorks() {
-      this.loading.work = true
-      this.$store.dispatch('getWorks')
+      this.loading.work = true;
+      this.$store.dispatch("getWorks");
     },
     getForYou() {
-      this.loading.work = true
-      this.$store.dispatch('getForYou')
+      this.loading.work = true;
+      this.$store.dispatch("getForYou");
     },
     getUserById() {
-      this.$store.dispatch('getUserById', this.me.id)
+      this.$store.dispatch("getUserById", this.me.id);
     },
     deleteWork(id) {
       if (window.confirm("Apakah anda ingin menghapus karya tulis ini??")) {
-        this.$store.dispatch('deleteWork', id)
-          .then(() => {
-            this.getWorks()
-            this.getUserById()
-          })
+        this.$store.dispatch("deleteWork", id).then(() => {
+          this.getWorks();
+          this.getUserById();
+        });
       }
     },
     // readWork(work) {
@@ -240,39 +250,42 @@ export default {
     //   toggle: 'todos/toggle',
     // }),
     handleScroll() {
-      const scrollBottom = window.innerHeight + window.scrollY
-      const fullHeight = document.documentElement.offsetHeight
+      const scrollBottom = window.innerHeight + window.scrollY;
+      const fullHeight = document.documentElement.offsetHeight;
 
-      if (scrollBottom >= fullHeight - 100 && !this.loading.work && this.works.length < this.total) {
-        this.loadMore()
+      if (
+        scrollBottom >= fullHeight - 100 &&
+        !this.loading.work &&
+        this.works.length < this.total
+      ) {
+        this.loadMore();
       }
     },
 
     async loadMore() {
-      this.page += 1
-      await this.fetchWorks()
+      this.page += 1;
+      await this.fetchWorks();
     },
 
     async fetchWorks() {
-      this.loading.work = true
+      this.loading.work = true;
 
       try {
-        const res = await this.$store.dispatch('getWorks', {
+        const res = await this.$store.dispatch("getWorks", {
           page: this.page,
-          limit: this.limit
-        })
+          limit: this.limit,
+        });
 
         if (res && Array.isArray(res.works)) {
-          this.works.push(...res.works)
-          this.total = res.total || 0
+          this.works.push(...res.works);
+          this.total = res.total || 0;
         }
-
       } catch (error) {
-        console.error('Gagal memuat works:', error)
+        console.error("Gagal memuat works:", error);
       }
 
-      this.loading.work = false
-    }
+      this.loading.work = false;
+    },
   },
   components: {
     WorkCard,
@@ -281,15 +294,15 @@ export default {
     LoadingPage,
   },
   mounted() {
-    this.getWorks()
-    this.getForYou()
-    this.getUserById()
-    this.fetchWorks()
-    window.addEventListener('scroll', this.handleScroll)
+    this.getWorks();
+    this.getForYou();
+    this.getUserById();
+    this.fetchWorks();
+    window.addEventListener("scroll", this.handleScroll);
   },
   beforeUnmount() {
     // agar tidak memory leak
-    window.removeEventListener('scroll', this.handleScroll)
+    window.removeEventListener("scroll", this.handleScroll);
   },
-}
+};
 </script>

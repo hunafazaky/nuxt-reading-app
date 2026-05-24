@@ -30,28 +30,28 @@ export const mutations = {
   },
   updateReaders(state, data) {
     const newData = data.readers.filter(
-      (item) => item._id !== state.userData.id,
+      (item) => item._id !== state.userData.id
     );
     newData.unshift(state.userData.id);
     state.workReaders = newData;
   },
   updateLikeBy(state, data) {
     const newData = data.like_by.filter(
-      (item) => item._id !== state.userData.id,
+      (item) => item._id !== state.userData.id
     );
     newData.unshift(state.userData.id);
     state.workLikeBy = newData;
   },
   updateRateBy(state, rating) {
     const newData = state.workData.rate_by.filter(
-      (item) => item.user_id !== state.userData.id,
+      (item) => item.user_id !== state.userData.id
     );
     newData.unshift({ user_id: state.userData.id, rating });
     state.workData.rate_by = newData;
   },
   removeLikeBy(state, data) {
     const newData = data.like_by.filter(
-      (item) => item._id !== state.userData.id,
+      (item) => item._id !== state.userData.id
     );
     state.workLikeBy = newData;
   },
@@ -65,28 +65,28 @@ export const mutations = {
   },
   updateReadList(state, data) {
     const newData = state.userData.read_list.filter(
-      (item) => item._id !== data,
+      (item) => item._id !== data
     );
     newData.unshift(data);
     state.newReadList = newData;
   },
   updateLikeList(state, data) {
     const newData = state.userData.like_list.filter(
-      (item) => item._id !== data,
+      (item) => item._id !== data
     );
     newData.unshift(data);
     state.userData.like_list = newData;
   },
   updateRateList(state, rating) {
     const newData = state.userData.rate_list.filter(
-      (item) => item.work_id !== state.workData.id,
+      (item) => item.work_id !== state.workData.id
     );
     newData.unshift({ work_id: state.workData.id, rating });
     state.userData.rate_list = newData;
   },
   removeLikeList(state, data) {
     const newData = state.userData.like_list.filter(
-      (item) => item._id !== data,
+      (item) => item._id !== data
     );
     state.userData.like_list = newData;
   },

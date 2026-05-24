@@ -21,7 +21,6 @@
         small
         @click="toggle"
         v-text="hashtag.name"
-        
       ></v-btn>
     </v-slide-item>
   </v-slide-group>
@@ -29,20 +28,20 @@
 
 <script>
 export default {
-  name: 'Hashtags',
+  name: "Hashtags",
   props: [],
   data: () => ({
-    hashtagActived: null
+    hashtagActived: null,
   }),
   computed: {
     hashtags() {
-      return this.$store.state.hashtags.data
+      return this.$store.state.hashtags.data;
     },
   },
   methods: {
     sendHashtag(data) {
-      this.$emit('hashtag-actived', data);
-    }
+      this.$emit("hashtag-actived", data);
+    },
   },
   watch: {
     hashtagActived(newValue, oldValue) {
@@ -50,9 +49,9 @@ export default {
       // console.log('Nilai berubah dari', oldValue, 'ke', newValue);
       // console.log();
       this.sendHashtag(newValue);
-    }
+    },
   },
-}
+};
 </script>
 
 <!-- v-if="i < 5"

@@ -7,12 +7,12 @@
 
 <script>
 export default {
-  name: 'PopConfirm',
-  props: ['message', 'showPopConfirm'],
+  name: "PopConfirm",
+  props: ["message", "showPopConfirm"],
   data() {
     return {
       dialog: false,
-    }
+    };
   },
-}
+};
 </script>

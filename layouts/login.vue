@@ -17,12 +17,11 @@
 
 <script>
 export default {
-  name: 'LoginLayout',
+  name: "LoginLayout",
   data() {
-    return {
-    }
+    return {};
   },
-}
+};
 </script>
 
 <style scoped>

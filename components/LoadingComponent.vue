@@ -13,12 +13,12 @@
 
 <script>
 export default {
-  name: 'LoadingComponent',
-  props: ['loading'],
+  name: "LoadingComponent",
+  props: ["loading"],
   data() {
-    return {}
+    return {};
   },
-}
+};
 </script>
 
 <style scoped>
