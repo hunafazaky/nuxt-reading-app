@@ -22,14 +22,20 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v4
 
+      # 1. Install pnpm FIRST
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 11 # You can omit this if your package.json has a "packageManager" field
+
+      # 2. Setup Node AND cache pnpm dependencies
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: ${{ matrix.node }}
           cache: pnpm
 
-      - name: Enable Corepack for pnpm
-        run: corepack enable
+      # (The 'corepack enable' step is no longer needed and can be deleted)
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
