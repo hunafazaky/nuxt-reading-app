@@ -18,11 +18,11 @@
 
 <script>
 export default {
-  name: 'Dialog',
+  name: "Dialog",
   data() {
     return {
       dialog: false,
-    }
+    };
   },
-}
+};
 </script>

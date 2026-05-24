@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LoadingPage :loading="loadingPage"/>
+    <LoadingPage :loading="loadingPage" />
     <v-row :justify="works?.length > 0 ? 'start' : 'center'" class="px-4 py-2">
       <LoadingComponent v-if="loading" :loading="loading" />
       <template v-if="!loading">
@@ -31,31 +31,31 @@
 </template>
 
 <script>
-import WorkCard from '../components/WorkCard.vue'
-import Hashtags from '../components/Hashtags.vue'
-import LoadingComponent from '../components/LoadingComponent.vue'
-import LoadingPage from '../components/LoadingPage.vue'
-import { mapMutations } from 'vuex'
+import WorkCard from "../components/WorkCard.vue";
+import Hashtags from "../components/Hashtags.vue";
+import LoadingComponent from "../components/LoadingComponent.vue";
+import LoadingPage from "../components/LoadingPage.vue";
+import { mapMutations } from "vuex";
 
 export default {
-  name: 'Bookshelf',
+  name: "Bookshelf",
   props: {
     loadingPage: {
       type: Boolean,
-      default: false
-    }
+      default: false,
+    },
   },
   data: () => ({
     loading: true,
-    works:[]
+    works: [],
   }),
   computed: {
     me() {
-      if (this.$store.getters['me']) {
-        return this.$store.getters['me'];
+      if (this.$store.getters["me"]) {
+        return this.$store.getters["me"];
       } else {
-        this.$router.push('/');
-        return []; 
+        this.$router.push("/");
+        return [];
       }
     },
     // works() {
@@ -64,13 +64,12 @@ export default {
   },
   methods: {
     getWorks() {
-      const like_list = this.me.like_list
+      const like_list = this.me.like_list;
       for (let index = 0; index < like_list.length; index++) {
         const element = like_list[index];
-        this.$store.dispatch('getWorkById', element._id)
-        .then((data) => {
-          this.works.push(data)
-        })        
+        this.$store.dispatch("getWorkById", element._id).then((data) => {
+          this.works.push(data);
+        });
       }
       // like_list.forEach(element => {
       //   this.$store.dispatch('getWorkById', element._id)
@@ -78,29 +77,27 @@ export default {
       //     this.works.push(data)
       //   })
       // });
-      this.loading = false
+      this.loading = false;
     },
     getUserById() {
-      this.$store.dispatch('getUserById', this.me.id).then(() => {
-      });
+      this.$store.dispatch("getUserById", this.me.id).then(() => {});
     },
     deleteWork(id) {
       if (window.confirm("Apakah anda ingin menghapus karya tulis ini??")) {
-        this.$store.dispatch('deleteWork', id)
-          .then(() => {
-            this.getWorks()
-            this.getUserById()
-          })
+        this.$store.dispatch("deleteWork", id).then(() => {
+          this.getWorks();
+          this.getUserById();
+        });
       }
     },
     addTodo(e) {
-      console.log(e.target.value)
-      console.log(this.todos)
-      this.$store.commit('todos/add', e.target.value)
-      e.target.value = ''
+      console.log(e.target.value);
+      console.log(this.todos);
+      this.$store.commit("todos/add", e.target.value);
+      e.target.value = "";
     },
     ...mapMutations({
-      toggle: 'todos/toggle',
+      toggle: "todos/toggle",
     }),
   },
   components: {
@@ -110,10 +107,10 @@ export default {
     LoadingPage,
   },
   mounted() {
-    this.getWorks()
-    this.getUserById()
+    this.getWorks();
+    this.getUserById();
   },
-}
+};
 </script>
 
 <!-- <template>

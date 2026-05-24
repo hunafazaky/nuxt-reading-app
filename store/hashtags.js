@@ -2,23 +2,23 @@ export const state = () => ({
   data: [
     {
       id: 0,
-      name: 'Teknologi'
+      name: "Teknologi",
     },
     {
       id: 1,
-      name: 'Kesehatan'
+      name: "Kesehatan",
     },
     {
       id: 2,
-      name: 'Olahraga'
+      name: "Olahraga",
     },
     {
       id: 3,
-      name: 'Travel'
+      name: "Travel",
     },
     {
       id: 4,
-      name: 'Otomotif'
+      name: "Otomotif",
     },
     // {
     //   id: 5,
@@ -72,7 +72,7 @@ export const state = () => ({
     //   id: 17,
     //   name: 'Drama'
     // }
-  ]
+  ],
   // data: [
   //   {
   //     id: 0,
@@ -155,19 +155,19 @@ export const state = () => ({
   //     name: 'Text to Speech'
   //   },
   // ]
-})
+});
 
 export const mutations = {
-  add (state, text) {
+  add(state, text) {
     state.list.push({
       text,
-      done: false
-    })
+      done: false,
+    });
   },
-  remove (state, { todo }) {
-    state.list.splice(state.list.indexOf(todo), 1)
+  remove(state, { todo }) {
+    state.list.splice(state.list.indexOf(todo), 1);
   },
-  toggle (state, todo) {
-    todo.done = !todo.done
-  }
-}
+  toggle(state, todo) {
+    todo.done = !todo.done;
+  },
+};

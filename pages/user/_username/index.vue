@@ -32,56 +32,36 @@
       <v-card rounded="lg" outlined>
         <v-card-text>
           <div class="d-flex">
-            <p class="my-1 font-weight-black overline">
-              Pen Name / Username
-            </p>
+            <p class="my-1 font-weight-black overline">Pen Name / Username</p>
             <v-spacer></v-spacer>
-            <p
-              class="my-1 font-weight-black overline"
-            >{{ me.pen_name }} / {{ me.username }}</p>
+            <p class="my-1 font-weight-black overline">
+              {{ me.pen_name }} / {{ me.username }}
+            </p>
           </div>
         </v-card-text>
         <v-divider></v-divider>
         <v-card-text>
           <div class="d-flex">
-            <p class="my-1 font-weight-light">
-              Jumlah karya yang ditulis
-            </p>
+            <p class="my-1 font-weight-light">Jumlah karya yang ditulis</p>
             <v-spacer></v-spacer>
-            <p
-              class="my-1 font-weight-light"
-              v-text="me.work_list.length"
-            ></p>
+            <p class="my-1 font-weight-light" v-text="me.work_list.length"></p>
           </div>
           <div class="d-flex">
-            <p class="my-1 font-weight-light">
-              Jumlah karya yang dibaca
-            </p>
+            <p class="my-1 font-weight-light">Jumlah karya yang dibaca</p>
             <v-spacer></v-spacer>
-            <p
-              class="my-1 font-weight-light"
-              v-text="me.read_list.length"
-            ></p>
+            <p class="my-1 font-weight-light" v-text="me.read_list.length"></p>
           </div>
           <div class="d-flex">
-            <p class="my-1 font-weight-light">
-              Jumlah karya yang disimpan
-            </p>
+            <p class="my-1 font-weight-light">Jumlah karya yang disimpan</p>
             <v-spacer></v-spacer>
-            <p
-              class="my-1 font-weight-light"
-              v-text="me.like_list.length"
-            ></p>
+            <p class="my-1 font-weight-light" v-text="me.like_list.length"></p>
           </div>
           <div class="d-flex">
             <p class="my-1 font-weight-light">
               Jumlah karya yang diberi rating
             </p>
             <v-spacer></v-spacer>
-            <p
-              class="my-1 font-weight-light"
-              v-text="me.rate_list.length"
-            ></p>
+            <p class="my-1 font-weight-light" v-text="me.rate_list.length"></p>
           </div>
           <!-- <template v-for="work in me.read_list">
             <div :key="work._id">
@@ -115,12 +95,12 @@
                 :miniVariant="true"
               /> -->
               <WorkCard
-                  :work="work"
-                  :wordLimit="{ title: 100, text: 0 }"
-                  :miniVariant="false"
-                  :mutation="false"
-                  @remove-work="deleteWork"
-                />
+                :work="work"
+                :wordLimit="{ title: 100, text: 0 }"
+                :miniVariant="false"
+                :mutation="false"
+                @remove-work="deleteWork"
+              />
             </v-col>
           </v-row>
           <template v-else>
@@ -133,13 +113,13 @@
 </template>
 
 <script>
-import WorkCard from '../../../components/WorkCard.vue'
-import PopZoom from '../../../components/PopZoom.vue'
-import PopConfirm from '../../../components/PopConfirm.vue'
-import { mapMutations } from 'vuex'
+import WorkCard from "../../../components/WorkCard.vue";
+import PopZoom from "../../../components/PopZoom.vue";
+import PopConfirm from "../../../components/PopConfirm.vue";
+import { mapMutations } from "vuex";
 
 export default {
-  name: 'User',
+  name: "User",
   data: () => ({
     showPopZoom: false,
     showPopConfirm: false,
@@ -148,12 +128,12 @@ export default {
   }),
   computed: {
     me() {
-      if (this.$store.getters['me']) {
+      if (this.$store.getters["me"]) {
         // this.loading.user = false
-        return this.$store.getters['me']
+        return this.$store.getters["me"];
       } else {
-        this.$router.push('/');
-        return []; 
+        this.$router.push("/");
+        return [];
       }
     },
   },
@@ -165,30 +145,30 @@ export default {
       this.$axios
         .get(`/users?username=${this.$route.params.username}`)
         .then((user) => {
-          this.user = me.data[0]
-        })
+          this.user = me.data[0];
+        });
     },
     getWorkById(work_id) {
       this.$axios.get(`/works/${work_id}`).then((work) => {
-        this.work = work.data
-      })
-      return this.work
+        this.work = work.data;
+      });
+      return this.work;
     },
     addTodo(e) {
-      console.log(e.target.value)
-      console.log(this.todos)
-      this.$store.commit('todos/add', e.target.value)
-      e.target.value = ''
+      console.log(e.target.value);
+      console.log(this.todos);
+      this.$store.commit("todos/add", e.target.value);
+      e.target.value = "";
     },
     ...mapMutations({
-      toggle: 'todos/toggle',
+      toggle: "todos/toggle",
     }),
   },
   mounted() {
-    this.getUserByUsername()
+    this.getUserByUsername();
     // this.getMe()
     // if (!this.me.account) this.$router.push('/')
   },
   component: { PopZoom, PopConfirm },
-}
+};
 </script>

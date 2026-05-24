@@ -93,10 +93,7 @@
                 v-model="fileOfCover"
                 @change="fileToImage"
               ></v-file-input>
-              <v-btn-toggle
-                v-model="attachment_type"
-                class="mb-2"
-              >
+              <v-btn-toggle v-model="attachment_type" class="mb-2">
                 <v-btn>
                   <v-icon>mdi-link-box</v-icon>
                 </v-btn>
@@ -104,13 +101,8 @@
                   <v-icon>mdi-file-pdf-box</v-icon>
                 </v-btn>
               </v-btn-toggle>
-              <v-row
-                v-if="attachment_type === 0"
-              >
-                <v-col
-                  cols="12"
-                  sm="5"
-                >
+              <v-row v-if="attachment_type === 0">
+                <v-col cols="12" sm="5">
                   <v-text-field
                     outlined
                     dense
@@ -118,10 +110,7 @@
                     v-model="work.attachment.title"
                   ></v-text-field>
                 </v-col>
-                <v-col
-                  cols="12"
-                  sm="7"
-                >                  
+                <v-col cols="12" sm="7">
                   <v-text-field
                     outlined
                     dense
@@ -146,8 +135,8 @@
                 hint="Lampirkan file PDF (Optional)"
                 persistent-hint
                 v-model="fileOfAttachment"
-                ></v-file-input>
-                <!-- @change="fileToLink" -->
+              ></v-file-input>
+              <!-- @change="fileToLink" -->
             </v-col>
           </v-row>
           <v-row>
@@ -184,10 +173,10 @@
 </template>
 
 <script>
-import TiptapEditor from '~/components/TiptapEditor.vue'
+import TiptapEditor from "~/components/TiptapEditor.vue";
 
 export default {
-  name: 'Write',
+  name: "Write",
   data: () => ({
     // me: {},
     loading: false,
@@ -207,31 +196,31 @@ export default {
   computed: {
     height() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-          return 220
-        case 'sm':
-          return 400
-        case 'md':
-          return 500
-        case 'lg':
-          return 600
-        case 'xl':
-          return 800
+        case "xs":
+          return 220;
+        case "sm":
+          return 400;
+        case "md":
+          return 500;
+        case "lg":
+          return 600;
+        case "xl":
+          return 800;
       }
     },
     hashtags() {
-      const hashtags = []
+      const hashtags = [];
       this.$store.state.hashtags.data.forEach((element) => {
-        hashtags.push(element.name)
-      })
-      return hashtags
+        hashtags.push(element.name);
+      });
+      return hashtags;
     },
     me() {
-      if (this.$store.getters['me']) {
-        return this.$store.getters['me'];
+      if (this.$store.getters["me"]) {
+        return this.$store.getters["me"];
       } else {
-        this.$router.push('/');
-        return []; 
+        this.$router.push("/");
+        return [];
       }
     },
   },
@@ -246,7 +235,7 @@ export default {
         // Get download URL
         return fileRef.getDownloadURL();
       } catch (error) {
-        console.error('Error uploading file:', error);
+        console.error("Error uploading file:", error);
         throw error;
       }
     },
@@ -254,42 +243,47 @@ export default {
       this.loading = true;
       try {
         this.work.writer = this.me.id;
-        
+
         // Upload cover
         if (this.fileOfCover) {
           this.work.cover = await this.uploadFileToStorage(this.fileOfCover);
         } else {
-          this.work.cover = '/temp-profile.webp';
+          this.work.cover = "/temp-profile.webp";
         }
 
         // Upload attachment
         if (this.fileOfAttachment) {
-          const attachmentLink = await this.uploadFileToStorage(this.fileOfAttachment);
-          this.work.attachment = { title: this.fileOfAttachment.name, link: attachmentLink };
+          const attachmentLink = await this.uploadFileToStorage(
+            this.fileOfAttachment
+          );
+          this.work.attachment = {
+            title: this.fileOfAttachment.name,
+            link: attachmentLink,
+          };
         } else if (this.work.attachment.link) {
           if (!this.work.attachment.title) {
-            this.work.attachment.title = 'Lampiran'
+            this.work.attachment.title = "Lampiran";
           }
         } else {
           this.work.attachment = {};
         }
 
         // Dispatch postWork action
-        await this.$store.dispatch('postWork', this.work);
+        await this.$store.dispatch("postWork", this.work);
 
         // Handle success
         this.success = true;
         setTimeout(() => {
-          this.$router.push('/home');
+          this.$router.push("/home");
         }, 1000);
         // console.log('File uploaded. Download URL:', this.work.cover);
       } catch (error) {
-        console.error('Error uploading work:', error);
+        console.error("Error uploading work:", error);
       }
     },
 
-// Usage
-// this.uploadWork();
+    // Usage
+    // this.uploadWork();
     // async postWork() {
     //   const file = this.fileOfCover;
     //   const storageRef = this.$fireModule.storage().ref();
@@ -343,7 +337,7 @@ export default {
     // },
     async fileToImage() {
       if (this.fileOfCover) {
-        this.work.cover = URL.createObjectURL(this.fileOfCover)
+        this.work.cover = URL.createObjectURL(this.fileOfCover);
       }
     },
   },
@@ -353,5 +347,5 @@ export default {
     // this.setWrittenBy()
   },
   created() {},
-}
+};
 </script>

@@ -128,14 +128,14 @@
 </template>
 
 <script>
-import TiptapEditor from '~/components/TiptapEditor.vue'
+import TiptapEditor from "~/components/TiptapEditor.vue";
 
 export default {
   async asyncData({ params, $axios }) {
-    const work = await $axios.$get(`/works/${params.id}`)
-    return { work }
+    const work = await $axios.$get(`/works/${params.id}`);
+    return { work };
   },
-  name: 'Edit',
+  name: "Edit",
   data: () => ({
     me: {},
     file: null,
@@ -145,48 +145,48 @@ export default {
   computed: {
     height() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-          return 220
-        case 'sm':
-          return 400
-        case 'md':
-          return 500
-        case 'lg':
-          return 600
-        case 'xl':
-          return 800
+        case "xs":
+          return 220;
+        case "sm":
+          return 400;
+        case "md":
+          return 500;
+        case "lg":
+          return 600;
+        case "xl":
+          return 800;
       }
     },
     hashtags() {
-      const hashtags = []
+      const hashtags = [];
       this.$store.state.hashtags.data.forEach((element) => {
-        hashtags.push(element.name)
-      })
-      return hashtags
+        hashtags.push(element.name);
+      });
+      return hashtags;
     },
   },
   methods: {
     getMe() {
-      this.me = this.$store.state.users.me
+      this.me = this.$store.state.users.me;
     },
     putWork() {
       this.$axios.put(`/works/${this.work.id}`, this.work).then(() => {
-        this.success = true
+        this.success = true;
         setTimeout(() => {
-          this.$router.push('/home')
-        }, 2000)
-      })
+          this.$router.push("/home");
+        }, 2000);
+      });
     },
     fileToImage() {
       if (this.file) {
-        this.work.content.img_cover = URL.createObjectURL(this.file)
+        this.work.content.img_cover = URL.createObjectURL(this.file);
       }
     },
   },
   components: { TiptapEditor },
   mounted() {
-    this.getMe()
-    if (!this.me) this.$router.push('/')
+    this.getMe();
+    if (!this.me) this.$router.push("/");
   },
-}
+};
 </script>

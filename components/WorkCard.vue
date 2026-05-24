@@ -63,10 +63,7 @@
               <v-icon> mdi-text-box-search </v-icon>
             </v-btn>
             <template
-              v-if="
-                mutation === true &&
-                work.writer.username === me.username
-              "
+              v-if="mutation === true && work.writer.username === me.username"
             >
               <v-btn
                 icon
@@ -90,48 +87,54 @@
           <div class="mx-2 absolute bottom" v-else>
             <v-row>
               <v-col cols="12" class="ma-0 pa-0">
-                <v-btn x-small plain>
-                  #{{ work.category[0] }}
-                </v-btn>
+                <v-btn x-small plain> #{{ work.category[0] }} </v-btn>
               </v-col>
               <v-col cols="12">
-                <v-btn 
+                <v-btn
                   v-if="!liked"
-                  x-small 
+                  x-small
                   :loading="loading"
-                  color="primary" 
+                  color="primary"
                   @click="likeWork(work)"
                 >
                   <v-icon small left> mdi-text-box-check </v-icon>
                   simpan
                 </v-btn>
-                <v-btn 
+                <v-btn
                   v-if="liked"
-                  x-small 
-                  color="secondary" 
+                  x-small
+                  color="secondary"
                   @click="dislikeWork(work)"
                 >
                   <v-icon small left> mdi-text-box-minus </v-icon>
                   buang
                 </v-btn>
-                <v-btn 
-                  x-small 
-                  color="success" 
-                  nuxt :to="`/work/${work.id}/read`"
-                  >
+                <v-btn
+                  x-small
+                  color="success"
+                  nuxt
+                  :to="`/work/${work.id}/read`"
+                >
                   <!-- @click="readWork(work)" -->
                   <v-icon small left> mdi-text-box-search </v-icon>
                   baca
                 </v-btn>
                 <v-btn
-                  v-if="work.writer.username === me.username"  
-                  x-small color="warning" nuxt :to="`/work/${work.id}/edit`">
+                  v-if="work.writer.username === me.username"
+                  x-small
+                  color="warning"
+                  nuxt
+                  :to="`/work/${work.id}/edit`"
+                >
                   <v-icon small left> mdi-text-box-edit </v-icon>
                   edit
                 </v-btn>
                 <v-btn
-                  v-if="work.writer.username === me.username"  
-                  x-small color="error" @click="removeWork(work.id)">
+                  v-if="work.writer.username === me.username"
+                  x-small
+                  color="error"
+                  @click="removeWork(work.id)"
+                >
                   <v-icon small left> mdi-text-box-remove </v-icon>
                   hapus
                 </v-btn>
@@ -146,7 +149,7 @@
 
 <script>
 export default {
-  name: 'WorkCard',
+  name: "WorkCard",
   props: {
     work: Object,
     wordLimit: Object,
@@ -157,31 +160,33 @@ export default {
       default() {
         return {
           numbers: 100,
-          units: '%',
-        }
+          units: "%",
+        };
       },
     },
   },
   data: () => ({
     // me: {},
-    liked:null,
-    loading:false
+    liked: null,
+    loading: false,
   }),
   computed: {
     me() {
-      return this.$store.getters['me'];
+      return this.$store.getters["me"];
     },
   },
   methods: {
     removeWork(id) {
-      this.$emit('remove-work', id)
+      this.$emit("remove-work", id);
     },
     likeCheck() {
-      const result = this.work.like_by.filter((item => item._id === this.me.id))
+      const result = this.work.like_by.filter(
+        (item) => item._id === this.me.id
+      );
       // console.log(result);
       if (result.length > 0) {
-        this.liked = true
-      } else this.liked = false
+        this.liked = true;
+      } else this.liked = false;
     },
     async likeWork(work) {
       try {
@@ -189,33 +194,31 @@ export default {
         this.loading = true;
 
         // Update like list
-        await this.$store.dispatch('updateLikeList', work.id);
+        await this.$store.dispatch("updateLikeList", work.id);
 
         // Update like by
-        await this.$store.dispatch('updateLikeBy', work);
+        await this.$store.dispatch("updateLikeBy", work);
 
         // Set loading to false and liked to true
         this.loading = false;
         this.liked = true;
       } catch (error) {
-        console.error('Error updating like:', error);
+        console.error("Error updating like:", error);
         // Handle error if necessary
       }
     },
     dislikeWork(work) {
       this.loading = true;
-      this.$store.dispatch('removeLikeList', work.id)
-      .then((data) => {
-        this.$store.dispatch('removeLikeBy', work)
-        .then((data) => {
-          this.loading = false
-          this.liked = false
-        })
-      })
+      this.$store.dispatch("removeLikeList", work.id).then((data) => {
+        this.$store.dispatch("removeLikeBy", work).then((data) => {
+          this.loading = false;
+          this.liked = false;
+        });
+      });
     },
   },
   mounted() {
     this.likeCheck();
   },
-}
+};
 </script>

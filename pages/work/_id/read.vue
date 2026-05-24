@@ -1,6 +1,6 @@
 <template>
   <div>
-    <LoadingPage :loading="loading"/>
+    <LoadingPage :loading="loading" />
     <v-row justify="space-between">
       <PopZoom
         maxWidth="500px"
@@ -59,7 +59,7 @@
                     class="overline font-weight-bold"
                     v-for="category in work?.category"
                   >
-                  #{{ category }}
+                    #{{ category }}
                   </span>
                 </div>
                 <div class="my-5" v-if="work?.attachment">
@@ -71,20 +71,16 @@
                     :max-width="150"
                     @click="openLink(work?.attachment.link)"
                   >
-                    <v-icon
-                      left
-                      dark
-                    >
-                      mdi-file-pdf-box
-                    </v-icon>
-                    <span class="text-truncate" style="max-width:150px">
-                      
+                    <v-icon left dark> mdi-file-pdf-box </v-icon>
+                    <span class="text-truncate" style="max-width: 150px">
                       {{ work?.attachment.title }}
                     </span>
                   </v-btn>
                 </div>
                 <div class="my-5">
-                  <p class="caption font-weight-bold my-0">Berikan Penilaian Anda</p>
+                  <p class="caption font-weight-bold my-0">
+                    Berikan Penilaian Anda
+                  </p>
                   <v-rating
                     hover
                     :length="5"
@@ -119,58 +115,63 @@
 </template>
 
 <script>
-import PopZoom from '../../../components/PopZoom.vue'
-import LoadingPage from '../../../components/LoadingPage.vue'
+import PopZoom from "../../../components/PopZoom.vue";
+import LoadingPage from "../../../components/LoadingPage.vue";
 
 export default {
-  name: 'Read',
+  name: "Read",
   data: () => ({
     me: {},
     showPopZoom: false,
     loading: true,
-    rating: null
+    rating: null,
   }),
   computed: {
     work() {
-      if (this.$store.getters['work']) {
-        // const work = 
-        this.loading = false
-        return this.$store.getters['work'];
+      if (this.$store.getters["work"]) {
+        // const work =
+        this.loading = false;
+        return this.$store.getters["work"];
       }
     },
     height() {
       switch (this.$vuetify.breakpoint.name) {
-        case 'xs':
-          return 220
-        case 'sm':
-          return 400
-        case 'md':
-          return 500
-        case 'lg':
-          return 600
-        case 'xl':
-          return 800
+        case "xs":
+          return 220;
+        case "sm":
+          return 400;
+        case "md":
+          return 500;
+        case "lg":
+          return 600;
+        case "xl":
+          return 800;
       }
     },
   },
   methods: {
     getMe() {
-      this.me = this.$store.getters['me']
+      this.me = this.$store.getters["me"];
     },
     getRating() {
-      const rate_list = this.$store.getters['me'].rate_list.find(item => item.work_id === this.$route.params.id)
-      this.rating = rate_list?.rating
-    },  
+      const rate_list = this.$store.getters["me"].rate_list.find(
+        (item) => item.work_id === this.$route.params.id
+      );
+      this.rating = rate_list?.rating;
+    },
     async getWorkById() {
       try {
         // Fetch work by ID
-        const work = await this.$store.dispatch('getWorkById', this.$route.params.id);
+        const work = await this.$store.dispatch(
+          "getWorkById",
+          this.$route.params.id
+        );
 
         // Update read list and readers
-        this.$store.dispatch('updateReadList', work.id);
-        this.$store.dispatch('updateReaders', work);
+        this.$store.dispatch("updateReadList", work.id);
+        this.$store.dispatch("updateReaders", work);
       } catch (error) {
-        console.error('Error fetching or updating work:', error);
+        console.error("Error fetching or updating work:", error);
         // Handle error if necessary
       }
       // this.$store.dispatch('getWorkById', this.$route.params.id)
@@ -181,28 +182,30 @@ export default {
     },
     async sendRating() {
       // console.log(this.rating);
-      this.$store.dispatch('updateRateList', this.rating);
-      this.$store.dispatch('updateRateBy', this.rating);
-      this.$store.dispatch('updateRecommender', this.rating).then((data) => {
+      this.$store.dispatch("updateRateList", this.rating);
+      this.$store.dispatch("updateRateBy", this.rating);
+      this.$store.dispatch("updateRecommender", this.rating).then((data) => {
         console.log(data);
-      })
+      });
     },
     hashtag(id) {
-      return this.$store.state.hashtags.data.find((hashtag) => hashtag.id == id)
+      return this.$store.state.hashtags.data.find(
+        (hashtag) => hashtag.id == id
+      );
     },
     writer(id) {
-      return this.$store.state.users.data.find((user) => user.id == id)
+      return this.$store.state.users.data.find((user) => user.id == id);
     },
     openLink(link) {
       window.open(link, "_blank");
-    }
+    },
   },
   components: { PopZoom, LoadingPage },
   mounted() {
-    this.getMe()
+    this.getMe();
     this.getWorkById();
-    this.getRating()
-    if (!this.me) this.$router.push('/')
+    this.getRating();
+    if (!this.me) this.$router.push("/");
   },
-}
+};
 </script>
