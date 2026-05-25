@@ -18,9 +18,6 @@
 <script>
 export default {
   name: "LoginLayout",
-  data() {
-    return {};
-  },
 };
 </script>
 
@@ -29,6 +26,7 @@ export default {
   .login-page {
     background-image: url(/login-image.png);
     background-size: cover;
+    background-position: center;
   }
 }
 </style>
