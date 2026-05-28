@@ -176,7 +176,7 @@ export default {
 
 <style scoped>
 .form {
-  height:100dvh;
+  height: 100dvh;
   display: flex;
   justify-content: center;
   align-items: center;
