@@ -1,14 +1,11 @@
 <template>
-  <div>
+  <div class="form">
     <LoadingPage :loading="loading" />
-    <h1 class="text-center ma-4">Reading App</h1>
     <v-row justify="center" align="center">
-      <v-col md="6" lg="5" v-if="height >= 500">
-        <v-img src="/login-image.png" width="100%"></v-img>
-      </v-col>
-      <v-col cols="12" sm="8" md="4" lg="4">
-        <v-card class="mb-2" shaped outlined elevation="5">
-          <v-card-title v-text="form_title"></v-card-title>
+      <v-col cols="10" sm="8" md="4" lg="4">
+        <h1 class="text-center">Reading App</h1>
+        <v-card class="mb-2" shaped outlined>
+          <v-card-title v-text="formType" />
           <v-card-text>
             <v-text-field
               dense
@@ -24,23 +21,18 @@
               type="password"
               required
             ></v-text-field>
+            <!-- <v-text-field
+              v-if="formType == 'Sign Up'"
+              dense
+              v-model="user.password"
+              label="Password Confirmation"
+              type="password-confirmation"
+              required
+            ></v-text-field> -->
           </v-card-text>
-          <v-card-actions class="mx-2">
-            <v-btn
-              v-if="form_title == 'Registrasi'"
-              small
-              color="success"
-              @click="regis"
-            >
-              registrasi
-            </v-btn>
-            <v-btn
-              v-if="form_title == 'Login'"
-              small
-              color="primary"
-              @click="login"
-            >
-              login
+          <v-card-actions class="ma-2">
+            <v-btn small :color="btnColor" @click="handleSubmit">
+              {{ formType }}
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -48,49 +40,43 @@
           class="mb-0"
           type="info"
           transition="slide-y-transition"
-          :value="regisAttempt || loginAttempt"
+          :value="signUpAttempt || signInAttempt"
         >
           {{ message }}
         </v-alert>
-        <span v-if="form_title == 'Registrasi'" class="caption text--secondary"
-          >Sudah punya akun?
-          <span class="text-decoration-none" @click.prevent="openLoginForm"
-            >Login</span
-          >
-        </span>
-        <span v-if="form_title == 'Login'" class="caption text--secondary"
-          >Belum punya akun?
-          <span
-            class="text-decoration-none success--text"
-            @click.prevent="openRegisForm"
-            >Registrasi</span
-          >
-        </span>
+        <v-card class="mb-2" shaped outlined>
+          <v-card-text>
+            Move to
+            <span
+              :class="[
+                'text-decoration-none',
+                'font-weight-bold',
+                formType == 'Sign Up' ? 'primary--text' : 'success--text',
+              ]"
+              @click.prevent="changeFormType"
+              >{{ formType == "Sign Up" ? "Sign In" : "Sign Up" }}</span
+            >
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
   </div>
 </template>
-
-<style scoped>
-/* .card {
-  opacity: 90% !important;
-} */
-</style>
 
 <script>
 import LoadingComponent from "../components/LoadingComponent.vue";
 import LoadingPage from "../components/LoadingPage.vue";
 
 export default {
-  layout: "login",
+  layout: "AuthLayout",
   data: () => ({
     user: {
       username: null,
       password: null,
     },
-    loginAttempt: false,
-    regisAttempt: false,
-    form_title: "Registrasi",
+    signInAttempt: false,
+    signUpAttempt: false,
+    formType: "Sign Up",
     message: "",
     loading: false,
   }),
@@ -113,30 +99,41 @@ export default {
           return 800;
       }
     },
+    btnColor() {
+      return this.formType === "Sign Up" ? "success" : "primary";
+    },
   },
 
   methods: {
-    openLoginForm() {
-      this.form_title = "Login";
+    handleSubmit() {
+      if (this.formType === "Sign Up") {
+        this.signup();
+      } else {
+        this.signin();
+      }
     },
-    openRegisForm() {
-      this.form_title = "Registrasi";
+    changeFormType() {
+      if (this.formType === "Sign Up") {
+        this.formType = "Sign In";
+      } else {
+        this.formType = "Sign Up";
+      }
     },
     // ... method lain ...
-    login() {
+    signin() {
       this.loading = true;
       this.$store
-        .dispatch("login", this.user)
+        .dispatch("signin", this.user)
         .then((data) => {
           // Cek apakah data.user ada dan memiliki id
           if (data.user && data.user.id) {
-            this.message = "Login Berhasil!!";
-            this.loginAttempt = true;
+            this.message = "Sign In Berhasil!!";
+            this.signInAttempt = true;
             this.$router.push("/home");
           } else {
             // Fallback message jika ada error dari backend
             this.message = "Error: " + (data.message || "Terjadi kesalahan");
-            this.loginAttempt = true;
+            this.signInAttempt = true;
             this.loading = false;
           }
         })
@@ -150,17 +147,16 @@ export default {
           this.loading = false;
         });
     },
-    regis() {
-      this.regisAttempt = true;
+    signup() {
+      this.signUpAttempt = true;
       this.loading = true;
       this.$store
-        .dispatch("regis", this.user)
+        .dispatch("signup", this.user)
         .then((data) => {
           this.loading = false;
-          // Cek apakah data.user ada dan memiliki id
           if (data.user && data.user.id) {
-            this.message = "Registrasi Berhasil!!";
-            this.login();
+            this.message = "Sign Up Berhasil!!";
+            this.signin();
           } else {
             this.message = "Error: " + (data.message || "Terjadi kesalahan");
           }
@@ -177,3 +173,12 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.form {
+  height:100dvh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+</style>

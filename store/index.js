@@ -379,7 +379,7 @@ export const actions = {
         });
     });
   },
-  regis({ commit }, data) {
+  signup({ commit }, data) {
     return new Promise((resolve, reject) => {
       this.$axios
         .post("/users", {
@@ -397,7 +397,7 @@ export const actions = {
         });
     });
   },
-  login({ commit }, data) {
+  signin({ commit }, data) {
     return new Promise((resolve, reject) => {
       this.$axios
         .post("/users/login", {
@@ -418,7 +418,7 @@ export const actions = {
         });
     });
   },
-  login({ commit }, data) {
+  signin({ commit }, data) {
     return new Promise((resolve, reject) => {
       this.$axios
         .post("/users/login", {
