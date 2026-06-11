@@ -4,7 +4,7 @@
     <v-row justify="space-between">
       <PopZoom
         maxWidth="500px"
-        :image="work?.cover"
+        :image="work?.cover || '/temp-cover.webp'"
         :showPopZoom="showPopZoom"
         @hidePopZoom="showPopZoom = false"
       />
@@ -36,7 +36,7 @@
                     style="inset: 0; position: absolute"
                     height="100%"
                     cover
-                    :src="work?.cover"
+                    :src="work?.cover || '/temp-cover.webp'"
                   ></v-img>
                 </v-sheet>
               </v-col>

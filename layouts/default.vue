@@ -96,6 +96,7 @@
         </v-card-text>
       </v-card>
     </v-footer>
+    <GlobalSnackbar />
   </v-app>
 </template>
 
@@ -149,21 +150,65 @@ export default {
       }
     },
     me() {
-      if (this.$store.getters["me"]) {
-        return this.$store.getters["me"];
-      } else {
-        this.$router.push("/");
-        return [];
-      }
+      return this.$store.getters["users/me"];
     },
   },
   methods: {
-    // getMe() {
-    //   this.me = this.$store.state.users.me
-    // },
+    parseJwt(token) {
+      try {
+        const base64Url = token.split(".")[1];
+        const base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+        const jsonPayload = decodeURIComponent(
+          window
+            .atob(base64)
+            .split("")
+            .map((c) => "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2))
+            .join("")
+        );
+        return JSON.parse(jsonPayload);
+      } catch (e) {
+        return null;
+      }
+    },
+    async fetchUser() {
+      const token = localStorage.getItem("auth_token");
+      if (!token) {
+        this.$router.push("/");
+        return;
+      }
+
+      const decoded = this.parseJwt(token);
+      let userId = localStorage.getItem("auth_user_id");
+
+      if (decoded && (decoded.id || decoded._id)) {
+        userId = decoded.id || decoded._id;
+        if (decoded.exp && decoded.exp * 1000 < Date.now()) {
+          localStorage.removeItem("auth_token");
+          localStorage.removeItem("auth_user_id");
+          this.$router.push("/");
+          return;
+        }
+      }
+
+      if (!userId) {
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("auth_user_id");
+        this.$router.push("/");
+        return;
+      }
+
+      try {
+        await this.$store.dispatch("users/getUserById", userId);
+      } catch (error) {
+        console.error("Failed to load user:", error);
+        localStorage.removeItem("auth_token");
+        localStorage.removeItem("auth_user_id");
+        this.$router.push("/");
+      }
+    },
   },
   mounted() {
-    // this.getMe()
+    this.fetchUser();
   },
 };
 </script>

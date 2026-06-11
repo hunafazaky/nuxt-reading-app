@@ -19,7 +19,7 @@
     >
       <v-img
         height="100%"
-        :src="work.cover"
+        :src="work.cover || '/temp-cover.webp'"
         gradient="to top, rgba(12.9, 12.9, 12.9, 0), rgba(12.9, 12.9, 12.9, 1)"
       >
         <v-card-actions
@@ -172,7 +172,7 @@ export default {
   }),
   computed: {
     me() {
-      return this.$store.getters["me"];
+      return this.$store.getters["users/me"];
     },
   },
   methods: {
@@ -194,10 +194,10 @@ export default {
         this.loading = true;
 
         // Update like list
-        await this.$store.dispatch("updateLikeList", work.id);
+        await this.$store.dispatch("users/updateLikeList", work.id);
 
         // Update like by
-        await this.$store.dispatch("updateLikeBy", work);
+        await this.$store.dispatch("works/updateLikeBy", work);
 
         // Set loading to false and liked to true
         this.loading = false;
@@ -209,8 +209,8 @@ export default {
     },
     dislikeWork(work) {
       this.loading = true;
-      this.$store.dispatch("removeLikeList", work.id).then((data) => {
-        this.$store.dispatch("removeLikeBy", work).then((data) => {
+      this.$store.dispatch("users/removeLikeList", work.id).then((data) => {
+        this.$store.dispatch("works/removeLikeBy", work).then((data) => {
           this.loading = false;
           this.liked = false;
         });

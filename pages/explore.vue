@@ -73,24 +73,24 @@ export default {
     //   return this.$store.getters.getCounter
     // },
     me() {
-      if (this.$store.getters["me"]) {
+      if (this.$store.getters["users/me"]) {
         this.loading.user = false;
-        return this.$store.getters["me"];
+        return this.$store.getters["users/me"];
       } else {
         this.$router.push("/");
         return [];
       }
     },
     // works() {
-    //   if (this.$store.getters['works']) {
+    //   if (this.$store.getters['works/works']) {
     //     this.loading.work = false
-    //     return this.$store.getters['works']
+    //     return this.$store.getters['works/works']
     //   }
     // },
     foryou() {
-      if (this.$store.getters["foryou"]) {
+      if (this.$store.getters["recommender/foryou"]) {
         this.loading.work = false;
-        return this.$store.getters["foryou"];
+        return this.$store.getters["recommender/foryou"];
       }
     },
   },
@@ -104,7 +104,7 @@ export default {
     // async fetchWorks() {
     //   this.loading.work = true
     //   try {
-    //     const res = await this.$store.dispatch('getWorks', {
+    //     const res = await this.$store.dispatch('works/getWorks', {
     //       page: this.page,
     //       limit: this.limit
     //     })
@@ -132,26 +132,26 @@ export default {
     // },
     getWorks() {
       this.loading.work = true;
-      this.$store.dispatch("getWorks");
+      this.$store.dispatch("works/getWorks");
     },
     getForYou() {
       this.loading.work = true;
-      this.$store.dispatch("getForYou");
+      this.$store.dispatch("recommender/getForYou");
     },
     getUserById() {
-      this.$store.dispatch("getUserById", this.me.id);
+      this.$store.dispatch("users/getUserById", this.me.id);
     },
     deleteWork(id) {
       if (window.confirm("Apakah anda ingin menghapus karya tulis ini??")) {
-        this.$store.dispatch("deleteWork", id).then(() => {
+        this.$store.dispatch("works/deleteWork", id).then(() => {
           this.getWorks();
           this.getUserById();
         });
       }
     },
     // readWork(work) {
-    //   this.$store.dispatch('updateReadList', work._id)
-    //   this.$store.dispatch('updateReaders', work)
+    //   this.$store.dispatch('users/updateReadList', work._id)
+    //   this.$store.dispatch('works/updateReaders', work)
     // },
     // addTodo(e) {
     //   console.log(e.target.value)
@@ -184,7 +184,7 @@ export default {
       this.loading.work = true;
 
       try {
-        const res = await this.$store.dispatch("getWorks", {
+        const res = await this.$store.dispatch("works/getWorks", {
           page: this.page,
           limit: this.limit,
           category: this.category,

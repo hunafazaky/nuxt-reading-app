@@ -3,39 +3,7 @@
     <LoadingPage :loading="loading.page" />
     <v-row :justify="works?.length > 0 ? 'start' : 'center'">
       <v-col cols="8">
-        <p
-          class="overline text-center text-secondary ma-4"
-          v-if="foryou?.length > 0"
-        >
-          Rekomendasi
-        </p>
-        <v-row class="mt-0" v-if="foryou?.length > 0">
-          <LoadingComponent v-if="loading.work" :loading="loading.work" />
-          <template v-if="!loading.work">
-            <template>
-              <v-col
-                v-for="(work, i) in foryou"
-                v-if="i < 6"
-                :key="work.id"
-                class="px-1 py-0"
-                cols="4"
-              >
-                <WorkCard
-                  :work="work"
-                  :wordLimit="{ title: 100, text: 0 }"
-                  :miniVariant="false"
-                  :mutation="false"
-                  @remove-work="deleteWork"
-                />
-              </v-col>
-            </template>
-          </template>
-        </v-row>
-        <!-- {{ foryou }} -->
-        <p
-          class="overline text-center text-secondary ma-4"
-          v-if="foryou?.length > 0"
-        >
+        <p class="overline text-center text-secondary ma-4">
           Paling Baru
         </p>
         <v-row class="mt-0">
@@ -56,38 +24,43 @@
                   @remove-work="deleteWork"
                 />
               </v-col>
-              <v-col class="px-1 py-0" cols="4">
-                <!-- <button @click="loadMore" :disabled="loading.work || works.length >= total">
-                  {{ loading.work ? 'Loading...' : (works.length >= total ? 'No more works' : 'Load More') }}
-                </button> -->
-                <div v-if="loading.work" class="loading-indicator">
-                  Loading more works...
-                </div>
-              </v-col>
             </template>
             <template v-else>
-              <p class="overline text-center text-secondary ma-4">Memuat...</p>
+              <p class="overline text-center text-secondary ma-4 w-100">
+                Memuat atau belum ada karya tulis...
+              </p>
             </template>
+            <v-row justify="center" class="mt-4 w-100" v-if="pageCount > 1">
+              <v-btn
+                v-for="pageNumber in pageNumbers"
+                :key="pageNumber"
+                :color="pageNumber === page ? 'primary' : 'grey lighten-2'"
+                :outlined="pageNumber !== page"
+                class="ma-1"
+                small
+                @click="setPage(pageNumber)"
+              >
+                {{ pageNumber }}
+              </v-btn>
+            </v-row>
           </template>
         </v-row>
       </v-col>
       <v-col cols="4">
         <v-row class="mt-0">
-          <LoadingComponent v-if="loading.user" :loading="loading.user" />
-          <template v-if="!loading.user">
-            <v-card rounded="lg" fixed outlined>
+          <template v-if="me">
+            <v-card rounded="lg" fixed outlined class="w-100">
               <v-card-text>
                 <nuxt-link
                   :to="`/user/${me.username}`"
-                  class="text-decoration-none black--text text-truncate"
+                  class="text-decoration-none black--text text-truncate d-flex align-center"
                 >
-                  <v-avatar class="mr-1" size="36">
-                    <v-img :src="me.photo"></v-img>
+                  <v-avatar class="mr-2" size="36">
+                    <v-img :src="me.photo || 'https://via.placeholder.com/150'"></v-img>
                   </v-avatar>
-                  <span
-                    class="title text-capitalize font-weight-bold"
-                    v-text="me.pen_name"
-                  ></span>
+                  <span class="title text-capitalize font-weight-bold">
+                    {{ me.pen_name || me.username }}
+                  </span>
                 </nuxt-link>
               </v-card-text>
               <v-divider />
@@ -95,19 +68,18 @@
                 >Terakhir ditulis</v-card-title
               >
               <v-card-text>
-                <template v-if="me.work_list.length > 0">
+                <template v-if="me.work_list && me.work_list.length > 0">
                   <nuxt-link
-                    v-for="(work, i) in me.work_list"
-                    v-if="i < 5"
+                    v-for="work in me.work_list.slice(0, 5)"
                     :key="work._id"
                     :to="`/work/${work._id}/read`"
-                    class="text-decoration-none text--secondary"
+                    class="text-decoration-none text--secondary d-block mb-1 text-truncate"
                   >
-                    <p v-text="work.title"></p>
+                    {{ work.title }}
                   </nuxt-link>
                 </template>
-                <template v-if="me.work_list.length === 0">
-                  <p class="text--disabled">Belum menulis apa pun</p>
+                <template v-else>
+                  <p class="text--disabled mb-0">Belum menulis apa pun</p>
                 </template>
               </v-card-text>
               <v-divider />
@@ -115,20 +87,18 @@
                 >Terakhir dibaca</v-card-title
               >
               <v-card-text>
-                <template v-if="me.read_list.length > 0">
+                <template v-if="me.read_list && me.read_list.length > 0">
                   <nuxt-link
-                    v-for="(read, i) in me.read_list"
-                    v-if="i < 5"
+                    v-for="read in me.read_list.slice(0, 5)"
                     :key="read._id"
                     :to="`/work/${read._id}/read`"
-                    class="text-decoration-none text--secondary"
+                    class="text-decoration-none text--secondary d-block mb-1 text-truncate"
                   >
-                    <!-- @click="readWork(read)" -->
-                    <p v-text="read.title"></p>
+                    {{ read.title }}
                   </nuxt-link>
                 </template>
-                <template v-if="me.read_list.length === 0">
-                  <p class="text--disabled">Belum membaca apa pun</p>
+                <template v-else>
+                  <p class="text--disabled mb-0">Belum membaca apa pun</p>
                 </template>
               </v-card-text>
               <v-divider />
@@ -142,167 +112,78 @@
 
 <script>
 import WorkCard from "../components/WorkCard.vue";
-import Hashtags from "../components/Hashtags.vue";
 import LoadingComponent from "../components/LoadingComponent.vue";
 import LoadingPage from "../components/LoadingPage.vue";
-import { mapMutations } from "vuex";
 
 export default {
   name: "Home",
+  components: {
+    WorkCard,
+    LoadingComponent,
+    LoadingPage,
+  },
   data: () => ({
     loading: {
-      // foryou: true,
       work: true,
-      user: true,
       page: false,
     },
-    works: [], // Simpan semua artikel gabungan di sini
+    works: [],
     page: 1,
     limit: 12,
     total: 0,
   }),
   computed: {
-    // counter() {
-    //   return this.$store.getters.getCounter
-    // },
     me() {
-      if (this.$store.getters["me"]) {
-        this.loading.user = false;
-        return this.$store.getters["me"];
-      } else {
-        this.$router.push("/");
-        return [];
-      }
+      return this.$store.getters["users/me"];
     },
-    // works() {
-    //   if (this.$store.getters['works']) {
-    //     this.loading.work = false
-    //     return this.$store.getters['works']
-    //   }
-    // },
-    foryou() {
-      if (this.$store.getters["foryou"]) {
-        this.loading.work = false;
-        return this.$store.getters["foryou"];
-      }
+    pageCount() {
+      return this.total > 0 ? Math.ceil(this.total / this.limit) : 0;
+    },
+    pageNumbers() {
+      return Array.from({ length: this.pageCount }, (_, i) => i + 1);
     },
   },
   methods: {
-    // async fetchWorks() {
-    //   this.loading.work = true
-    //   try {
-    //     const res = await this.$store.dispatch('getWorks', {
-    //       page: this.page,
-    //       limit: this.limit
-    //     })
-
-    //     this.works.push(...res.works) // Gabungkan data lama + baru
-    //     this.total = res.total
-
-    //   } catch (error) {
-    //     console.error('Gagal memuat works:', error)
-    //   }
-
-    //   this.loading.work = false
-    // },
-
-    // async loadMore() {
-    //   if (this.works.length >= this.total) return // Sudah semua
-    //   this.page += 1
-    //   await this.fetchWorks()
-    // },
-    // incrementCounter() {
-    //   this.$store.dispatch('increment')
-    // },
-    // decrementCounter() {
-    //   this.$store.dispatch('decrement')
-    // },
-    getWorks() {
-      this.loading.work = true;
-      this.$store.dispatch("getWorks");
-    },
-    getForYou() {
-      this.loading.work = true;
-      this.$store.dispatch("getForYou");
-    },
-    getUserById() {
-      this.$store.dispatch("getUserById", this.me.id);
-    },
-    deleteWork(id) {
+    async deleteWork(id) {
       if (window.confirm("Apakah anda ingin menghapus karya tulis ini??")) {
-        this.$store.dispatch("deleteWork", id).then(() => {
-          this.getWorks();
-          this.getUserById();
-        });
+        try {
+          await this.$store.dispatch("works/deleteWork", id);
+          await this.fetchWorks();
+        } catch (error) {
+          console.error(error);
+        }
       }
     },
-    // readWork(work) {
-    //   this.$store.dispatch('updateReadList', work._id)
-    //   this.$store.dispatch('updateReaders', work)
-    // },
-    // addTodo(e) {
-    //   console.log(e.target.value)
-    //   console.log(this.todos)
-    //   this.$store.commit('todos/add', e.target.value)
-    //   e.target.value = ''
-    // },
-    // ...mapMutations({
-    //   toggle: 'todos/toggle',
-    // }),
-    handleScroll() {
-      const scrollBottom = window.innerHeight + window.scrollY;
-      const fullHeight = document.documentElement.offsetHeight;
-
-      if (
-        scrollBottom >= fullHeight - 100 &&
-        !this.loading.work &&
-        this.works.length < this.total
-      ) {
-        this.loadMore();
-      }
-    },
-
-    async loadMore() {
-      this.page += 1;
+    async setPage(pageNumber) {
+      if (pageNumber === this.page) return;
+      this.page = pageNumber;
       await this.fetchWorks();
     },
-
     async fetchWorks() {
       this.loading.work = true;
-
       try {
-        const res = await this.$store.dispatch("getWorks", {
+        const res = await this.$store.dispatch("works/getWorks", {
           page: this.page,
           limit: this.limit,
         });
-
         if (res && Array.isArray(res.works)) {
-          this.works.push(...res.works);
+          this.works = res.works;
           this.total = res.total || 0;
+        } else {
+          this.works = [];
+          this.total = 0;
         }
       } catch (error) {
         console.error("Gagal memuat works:", error);
+      } finally {
+        this.loading.work = false;
       }
-
-      this.loading.work = false;
     },
   },
-  components: {
-    WorkCard,
-    Hashtags,
-    LoadingComponent,
-    LoadingPage,
-  },
-  mounted() {
-    this.getWorks();
-    this.getForYou();
-    this.getUserById();
-    this.fetchWorks();
-    window.addEventListener("scroll", this.handleScroll);
-  },
-  beforeUnmount() {
-    // agar tidak memory leak
-    window.removeEventListener("scroll", this.handleScroll);
+  async mounted() {
+    this.loading.page = true;
+    await this.fetchWorks();
+    this.loading.page = false;
   },
 };
 </script>

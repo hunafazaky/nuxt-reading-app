@@ -128,9 +128,9 @@ export default {
   }),
   computed: {
     me() {
-      if (this.$store.getters["me"]) {
+      if (this.$store.getters["users/me"]) {
         // this.loading.user = false
-        return this.$store.getters["me"];
+        return this.$store.getters["users/me"];
       } else {
         this.$router.push("/");
         return [];

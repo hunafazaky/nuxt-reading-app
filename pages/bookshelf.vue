@@ -51,15 +51,15 @@ export default {
   }),
   computed: {
     me() {
-      if (this.$store.getters["me"]) {
-        return this.$store.getters["me"];
+      if (this.$store.getters["users/me"]) {
+        return this.$store.getters["users/me"];
       } else {
         this.$router.push("/");
         return [];
       }
     },
     // works() {
-    //   return this.$store.getters['works'];
+    //   return this.$store.getters['works/works'];
     // }
   },
   methods: {
@@ -67,12 +67,12 @@ export default {
       const like_list = this.me.like_list;
       for (let index = 0; index < like_list.length; index++) {
         const element = like_list[index];
-        this.$store.dispatch("getWorkById", element._id).then((data) => {
+        this.$store.dispatch("works/getWorkById", element._id).then((data) => {
           this.works.push(data);
         });
       }
       // like_list.forEach(element => {
-      //   this.$store.dispatch('getWorkById', element._id)
+      //   this.$store.dispatch('works/getWorkById', element._id)
       //   .then((data) => {
       //     this.works.push(data)
       //   })
@@ -80,11 +80,11 @@ export default {
       this.loading = false;
     },
     getUserById() {
-      this.$store.dispatch("getUserById", this.me.id).then(() => {});
+      this.$store.dispatch("users/getUserById", this.me.id).then(() => {});
     },
     deleteWork(id) {
       if (window.confirm("Apakah anda ingin menghapus karya tulis ini??")) {
-        this.$store.dispatch("deleteWork", id).then(() => {
+        this.$store.dispatch("works/deleteWork", id).then(() => {
           this.getWorks();
           this.getUserById();
         });
@@ -166,15 +166,15 @@ export default {
   }),
   computed: {
     me() {
-      if (this.$store.getters['me']) {
-        return this.$store.getters['me'];
+      if (this.$store.getters['users/me']) {
+        return this.$store.getters['users/me'];
       } else {
         this.$router.push('/');
         return []; 
       }
     },
     // works() {
-    //   return this.$store.getters['works'];
+    //   return this.$store.getters['works/works'];
     // }
   },
   methods: {
@@ -182,7 +182,7 @@ export default {
       const like_list = this.me.like_list
       for (let index = 0; index < like_list.length; index++) {
         const element = like_list[index];
-        this.$store.dispatch('getWorkById', element._id)
+        this.$store.dispatch('works/getWorkById', element._id)
         .then((data) => {
           this.works.push(data)
         })        
@@ -190,12 +190,12 @@ export default {
       this.loading = false
     },
     getUserById() {
-      this.$store.dispatch('getUserById', this.me.id).then(() => {
+      this.$store.dispatch('users/getUserById', this.me.id).then(() => {
       });
     },
     deleteWork(id) {
       if (window.confirm("Apakah anda ingin menghapus karya tulis ini??")) {
-        this.$store.dispatch('deleteWork', id)
+        this.$store.dispatch('works/deleteWork', id)
           .then(() => {
             this.getWorks()
             this.getUserById()
